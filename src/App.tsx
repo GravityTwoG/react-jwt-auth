@@ -1,23 +1,62 @@
-import { useState } from 'react';
+import { Link, Route, Router, Switch } from 'wouter';
+
+import { ProfilePage } from './pages/Profile';
+import { LoginPage } from './pages/Login';
+import { RegisterPage } from './pages/Register';
+
+import { useAuthContext } from './contexts/AuthContext/context';
+import { AuthStatus } from './types';
+import { privatePage } from './privatePage';
+import { anonymousPage } from './anonymousPage';
+
+const profilePage = privatePage(ProfilePage);
+const loginPage = anonymousPage(LoginPage);
+const registerPage = anonymousPage(RegisterPage);
 
 export function App() {
-  const [count, setCount] = useState(0);
+  const { authStatus } = useAuthContext();
+
+  if (authStatus === AuthStatus.LOADING) {
+    return (
+      <div>
+        <div>Loading...</div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <div></div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <nav>
+        <ul>
+          {authStatus === AuthStatus.AUTHENTICATED && (
+            <li>
+              <Link to={'/'}>Profile</Link>
+            </li>
+          )}
+          {authStatus === AuthStatus.ANONYMOUS && (
+            <>
+              <li>
+                <Link to={'/login'}>Login</Link>
+              </li>
+              <li>
+                <Link to={'/register'}>Register</Link>
+              </li>
+            </>
+          )}
+        </ul>
+      </nav>
+
+      <Router>
+        <Switch>
+          <Route path={'/'} component={profilePage} />
+          <Route path={'/login'} component={loginPage} />
+          <Route path={'/register'} component={registerPage} />
+
+          <Route>
+            <h1>Page not found</h1>
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   );
 }
