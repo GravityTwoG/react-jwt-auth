@@ -16,9 +16,10 @@ instance.interceptors.response.use(
   null,
   (error) => {
     if (axios.isAxiosError(error)) {
+      const errorCode = error.response?.data?.code || 'UNKNOWN';
       const errorMessage = error.response?.data?.error || 'Unknown error';
 
-      throw new APIError(errorMessage);
+      throw new APIError(errorCode, errorMessage);
     }
 
     throw error;

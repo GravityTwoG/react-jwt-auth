@@ -31,7 +31,7 @@ export const LoginPage = () => {
       if (error instanceof APIError) {
         setError('root', {
           type: 'custom',
-          message: mapError(error.message),
+          message: mapError(error),
         });
       } else {
         setError('root', {
@@ -51,7 +51,7 @@ export const LoginPage = () => {
           <label>
             <p>Email</p>
             <input
-              type="email"
+              type="text"
               {...register('email', { required: 'Email is required' })}
             />
           </label>
@@ -82,11 +82,11 @@ export const LoginPage = () => {
   );
 };
 
-const mapError = (message: string) => {
-  switch (message) {
+const mapError = (error: APIError) => {
+  switch (error.code) {
     case 'INCORRECT_EMAIL_OR_PASSWORD':
       return 'Incorrect email or password';
     default:
-      return message;
+      return `${error.code}: ${error.message}`;
   }
 };

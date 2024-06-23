@@ -32,7 +32,7 @@ export const RegisterPage = () => {
       if (error instanceof APIError) {
         setError('root', {
           type: 'custom',
-          message: mapError(error.message),
+          message: mapError(error),
         });
       } else {
         setError('root', {
@@ -94,13 +94,17 @@ export const RegisterPage = () => {
   );
 };
 
-function mapError(error: string) {
-  switch (error) {
-    case 'EMAIL_EXISTS':
+function mapError(error: APIError) {
+  switch (error.code) {
+    case 'EMAIL_INVALID':
+      return 'Email is invalid';
+    case 'EMAIL_ALREADY_EXISTS':
       return 'Email already exists';
+    case 'PASSWORD_LENGTH_INVALID':
+      return 'Password length must be between 8 and 64 characters';
     case 'PASSWORDS_DONT_MATCH':
       return 'Passwords do not match';
     default:
-      return error;
+      return `${error.code}: ${error.message}`;
   }
 }
