@@ -1,5 +1,7 @@
 import { useForm, useFormState } from 'react-hook-form';
 
+import classes from './auth.module.css';
+
 import { APIError } from '../APIError';
 import { useAuthContext } from '../contexts/AuthContext/context';
 
@@ -43,7 +45,7 @@ export const LoginPage = () => {
   });
 
   return (
-    <Container>
+    <Container className={classes.AuthPage}>
       <h1>Login</h1>
 
       <form onSubmit={onSubmit}>

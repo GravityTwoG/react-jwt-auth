@@ -8,3 +8,9 @@ export enum AuthStatus {
   AUTHENTICATED = 'AUTHENTICATED',
   ANONYMOUS = 'ANONYMOUS',
 }
+
+export type Session = {
+  ip: string;
+  userAgent: string;
+  createdAt: string;
+};

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { AuthStatus, User } from '../../types';
+import { AuthStatus, Session, User } from '../../types';
 
 interface IAuthContext {
   user: User;
@@ -11,7 +11,7 @@ interface IAuthContext {
   ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  getActiveSessions: () => Promise<string[]>;
+  getActiveSessions: () => Promise<Session[]>;
 }
 
 export const AuthContext = createContext<IAuthContext>({

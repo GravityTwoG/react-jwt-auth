@@ -9,7 +9,7 @@ export type ContainerProps = {
 
 export const Container = (props: ContainerProps) => {
   return (
-    <div className={clsx(classes.container, props.className)}>
+    <div className={clsx(classes.Container, props.className)}>
       {props.children}
     </div>
   );

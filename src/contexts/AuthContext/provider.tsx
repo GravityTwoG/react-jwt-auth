@@ -16,16 +16,15 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
   const [authStatus, setAuthStatus] = useState<AuthStatus>(AuthStatus.LOADING);
 
   useEffect(() => {
-    authAPI
-      .me()
-      .then((user) => {
-        setUser(user);
-        setAuthStatus(AuthStatus.AUTHENTICATED);
-      })
-      .catch(() => {
+    authAPI.onAuthStateChange((user) => {
+      if (!user) {
         setUser(defaultUser);
         setAuthStatus(AuthStatus.ANONYMOUS);
-      });
+      } else {
+        setUser(user);
+        setAuthStatus(AuthStatus.AUTHENTICATED);
+      }
+    });
   }, [authAPI]);
 
   const register = useCallback(

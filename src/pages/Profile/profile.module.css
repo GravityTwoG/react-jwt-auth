@@ -1,0 +1,31 @@
+.User {
+  margin-top: 1rem;
+}
+
+.SessionsHeader {
+  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.SessionsHeader > button {
+  max-width: 8rem;
+}
+
+.Sessions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.Sessions > li {
+  list-style: none;
+}
+
+.LogoutButton {
+  max-width: 10rem;
+  margin: auto;
+  display: block;
+}

@@ -8,6 +8,7 @@ const accessTokenStorage = {
 
 export class AuthAPI {
   private readonly axios: AxiosInstance;
+  private authStateListener?: (user: User | null) => void;
 
   constructor(axiosInstance: AxiosInstance) {
     this.axios = axiosInstance;
@@ -44,13 +45,18 @@ export class AuthAPI {
           !originalRequest._retry &&
           isAccessTokenExpired
         ) {
-          console.log('Access token expired. Refreshing...');
+          try {
+            originalRequest._retry = true;
+            console.log('Access token expired. Refreshing...');
 
-          originalRequest._retry = true;
-          const { accessToken } = await that.refreshTokens();
+            const { accessToken } = await that.refreshTokens();
 
-          accessTokenStorage.set(accessToken);
-          console.log('Access token refreshed.');
+            accessTokenStorage.set(accessToken);
+            console.log('Access token refreshed.');
+          } catch (error) {
+            console.error('Failed to refresh access token', error);
+            that.authStateListener && that.authStateListener(null);
+          }
 
           return that.axios(originalRequest);
         }
@@ -58,6 +64,17 @@ export class AuthAPI {
         return Promise.reject(error);
       }
     );
+  };
+
+  onAuthStateChange = async (callback: (user: User | null) => void) => {
+    this.authStateListener = callback;
+
+    try {
+      const user = await this.me();
+      this.authStateListener(user);
+    } catch (error) {
+      this.authStateListener(null);
+    }
   };
 
   register = async (email: string, password: string, password2: string) => {
@@ -103,9 +120,13 @@ export class AuthAPI {
   };
 
   getActiveSessions = async () => {
-    const response = await this.axios.get<{ sessions: string[] }>(
-      '/active-sessions'
-    );
+    const response = await this.axios.get<{
+      sessions: {
+        ip: string;
+        userAgent: string;
+        createdAt: string;
+      }[];
+    }>('/active-sessions');
     return response.data.sessions;
   };
 }
