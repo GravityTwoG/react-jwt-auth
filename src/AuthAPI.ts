@@ -1,74 +1,53 @@
 import { AxiosInstance } from 'axios';
 import { User } from './types';
-
-const accessTokenStorage = {
-  get: () => localStorage.getItem('accessToken'),
-  set: (token: string) => localStorage.setItem('accessToken', token),
-};
+import { AccessTokenService } from './AccessTokenService';
 
 export class AuthAPI {
   private readonly axios: AxiosInstance;
+  private readonly accessTokenStorage: AccessTokenService;
+
+  private refreshPromise: Promise<{
+    accessToken: string;
+    refreshToken: string;
+  }> | null = null;
+
   private authStateListener?: (user: User | null) => void;
 
   constructor(axiosInstance: AxiosInstance) {
     this.axios = axiosInstance;
+    this.accessTokenStorage = new AccessTokenService();
 
     this.setInterceptors();
   }
 
   private setInterceptors = () => {
-    this.axios.interceptors.request.use(function (config) {
-      // set Authorization header before each request
-      const token = accessTokenStorage.get();
-      config.headers.Authorization = token ? `Bearer ${token}` : '';
+    this.axios.interceptors.request.use(async (config) => {
+      const isExpired = this.accessTokenStorage.isExpiredOrAboutToExpire();
+      const isRefresh = config.url === '/auth/refresh-tokens';
 
+      // if token expired, try to refresh it
+      if (isExpired && !isRefresh) {
+        try {
+          await this.refreshTokens();
+          console.log('Tokens refreshed.');
+        } catch (error) {
+          console.error('Failed to refresh tokens', error);
+          this.authStateListener && this.authStateListener(null);
+          return config;
+        }
+      }
+
+      // set Authorization header before each request
+      const token = this.accessTokenStorage.get();
+      config.headers.Authorization = token ? `Bearer ${token}` : '';
       console.log('Authorization header set');
 
       return config;
     });
-
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that = this;
-
-    this.axios.interceptors.response.use(
-      function (response) {
-        return response;
-      },
-      async function (error) {
-        const originalRequest = error.config;
-
-        // intercept 401 responses
-        const message = error?.response?.data?.error || '';
-        const isAccessTokenExpired = message === 'Invalid or expired token';
-        if (
-          error.response.status === 401 &&
-          !originalRequest._retry &&
-          isAccessTokenExpired
-        ) {
-          try {
-            originalRequest._retry = true;
-            console.log('Access token expired. Refreshing...');
-
-            const { accessToken } = await that.refreshTokens();
-
-            accessTokenStorage.set(accessToken);
-            console.log('Access token refreshed.');
-          } catch (error) {
-            console.error('Failed to refresh access token', error);
-            that.authStateListener && that.authStateListener(null);
-          }
-
-          return that.axios(originalRequest);
-        }
-
-        return Promise.reject(error);
-      }
-    );
   };
 
   onAuthStateChange = async (callback: (user: User | null) => void) => {
     this.authStateListener = callback;
-
     try {
       const user = await this.me();
       this.authStateListener(user);
@@ -78,7 +57,7 @@ export class AuthAPI {
   };
 
   register = async (email: string, password: string, password2: string) => {
-    const response = await this.axios.post('/register', {
+    const response = await this.axios.post('/auth/register', {
       email,
       password,
       password2,
@@ -90,37 +69,57 @@ export class AuthAPI {
     const response = await this.axios.post<{
       user: User;
       accessToken: string;
-    }>('/login', {
+    }>('/auth/login', {
       email,
       password,
     });
 
     const accessToken = response.data.accessToken;
 
-    accessTokenStorage.set(accessToken);
+    this.accessTokenStorage.set(accessToken);
 
     return response.data.user;
   };
 
   refreshTokens = async () => {
-    const response = await this.axios.post<{ accessToken: string }>(
-      '/refresh-tokens'
-    );
+    try {
+      if (!this.refreshPromise) {
+        this.refreshPromise = this._refreshTokens();
+      }
+
+      // await is important here for finally block
+      const data = await this.refreshPromise;
+      return data;
+    } finally {
+      this.refreshPromise = null;
+    }
+  };
+
+  private _refreshTokens = async () => {
+    const response = await this.axios.post<{
+      accessToken: string;
+      refreshToken: string;
+    }>('/auth/refresh-tokens');
+
+    const accessToken = response.data.accessToken;
+    this.accessTokenStorage.set(accessToken);
+    console.log('Tokens refreshed.');
+
     return response.data;
   };
 
   logout = async () => {
-    await this.axios.post('/logout');
-    accessTokenStorage.set('');
+    await this.axios.post('/auth/logout');
+    this.accessTokenStorage.delete();
   };
 
   logoutAll = async () => {
-    await this.axios.post('/logout-all');
-    accessTokenStorage.set('');
+    await this.axios.post('/auth/logout-all');
+    this.accessTokenStorage.delete();
   };
 
   me = async () => {
-    const response = await this.axios.get<User>('/me');
+    const response = await this.axios.get<User>('/auth/me');
     return response.data;
   };
 
@@ -131,7 +130,7 @@ export class AuthAPI {
         userAgent: string;
         createdAt: string;
       }[];
-    }>('/active-sessions');
+    }>('/auth/active-sessions');
     return response.data.sessions;
   };
 
@@ -139,7 +138,7 @@ export class AuthAPI {
     const response = await this.axios.get<{
       accessTokenTTLsec: number;
       refreshTokenTTLsec: number;
-    }>('/config');
+    }>('/auth/config');
     return response.data;
   };
 }
