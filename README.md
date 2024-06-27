@@ -1,4 +1,12 @@
-# React + TypeScript + Vite
+# JWT auhthorizatin example
+
+Example of authorization with access + refresh token pair. It actually doesn't depend on used framework (React, vue etc). Tokens handled in data access layer (api)
+
+## Backend
+
+- https://github.com/GravityTwoG/go-jwt-auth
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
@@ -22,7 +30,7 @@ export default {
     project: ['./tsconfig.json', './tsconfig.node.json'],
     tsconfigRootDir: __dirname,
   },
-}
+};
 ```
 
 - Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
