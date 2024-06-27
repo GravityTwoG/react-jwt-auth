@@ -11,6 +11,7 @@ interface IAuthContext {
   ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  logoutAll: () => Promise<void>;
   getActiveSessions: () => Promise<Session[]>;
 }
 
@@ -23,6 +24,7 @@ export const AuthContext = createContext<IAuthContext>({
   register: async () => {},
   login: async () => {},
   logout: async () => {},
+  logoutAll: async () => {},
   getActiveSessions: async () => {
     return [];
   },

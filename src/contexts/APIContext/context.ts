@@ -5,7 +5,7 @@ import { AuthAPI } from '../../AuthAPI';
 import { APIError } from '../../APIError';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: 'http://localhost:8080/api',
   withCredentials: true,
 });
 

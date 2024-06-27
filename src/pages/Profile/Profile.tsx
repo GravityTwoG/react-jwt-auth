@@ -9,7 +9,7 @@ import { Container } from '../../components/Container/Container';
 import { Paper } from '../../components/Paper/Paper';
 
 export const ProfilePage = () => {
-  const { user, getActiveSessions, logout } = useAuthContext();
+  const { user, getActiveSessions, logout, logoutAll } = useAuthContext();
   const [activeSessions, setActiveSessions] = useState<Session[]>([]);
 
   useEffect(() => {
@@ -60,6 +60,11 @@ export const ProfilePage = () => {
       </ul>
 
       <div style={{ marginTop: '2rem' }}>
+        <button className={classes.LogoutButton} onClick={logoutAll}>
+          Logout all
+        </button>
+      </div>
+      <div style={{ marginTop: '1rem' }}>
         <button className={classes.LogoutButton} onClick={logout}>
           Logout
         </button>

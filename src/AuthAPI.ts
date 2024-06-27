@@ -114,6 +114,11 @@ export class AuthAPI {
     accessTokenStorage.set('');
   };
 
+  logoutAll = async () => {
+    await this.axios.post('/logout-all');
+    accessTokenStorage.set('');
+  };
+
   me = async () => {
     const response = await this.axios.get<User>('/me');
     return response.data;
@@ -128,5 +133,13 @@ export class AuthAPI {
       }[];
     }>('/active-sessions');
     return response.data.sessions;
+  };
+
+  getConfig = async () => {
+    const response = await this.axios.get<{
+      accessTokenTTLsec: number;
+      refreshTokenTTLsec: number;
+    }>('/config');
+    return response.data;
   };
 }

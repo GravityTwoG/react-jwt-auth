@@ -52,6 +52,17 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
     setAuthStatus(AuthStatus.ANONYMOUS);
   }, [authAPI]);
 
+  const logoutAll = useCallback(async () => {
+    try {
+      await authAPI.logoutAll();
+      setUser(defaultUser);
+      setAuthStatus(AuthStatus.ANONYMOUS);
+    } catch (error) {
+      console.error(error);
+      alert(`Failed to logout from all sessions: ${error}`);
+    }
+  }, [authAPI]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -60,6 +71,7 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
         register,
         login,
         logout,
+        logoutAll,
         getActiveSessions: authAPI.getActiveSessions,
       }}
     >

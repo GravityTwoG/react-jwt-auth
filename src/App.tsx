@@ -9,13 +9,25 @@ import { useAuthContext } from './contexts/AuthContext/context';
 import { AuthStatus } from './types';
 import { privatePage } from './privatePage';
 import { anonymousPage } from './anonymousPage';
+import { useAPIContext } from './contexts/APIContext/context';
+import { useEffect, useState } from 'react';
 
 const profilePage = privatePage(ProfilePage);
 const loginPage = anonymousPage(LoginPage);
 const registerPage = anonymousPage(RegisterPage);
 
 export function App() {
+  const { authAPI } = useAPIContext();
   const { authStatus } = useAuthContext();
+
+  const [config, setConfig] = useState({
+    accessTokenTTLsec: 0,
+    refreshTokenTTLsec: 0,
+  });
+
+  useEffect(() => {
+    authAPI.getConfig().then(setConfig).catch(console.error);
+  }, [authAPI]);
 
   if (authStatus === AuthStatus.LOADING) {
     return (
@@ -64,6 +76,21 @@ export function App() {
           </Switch>
         </Router>
       </main>
+
+      <Container
+        style={{
+          marginTop: '1rem',
+        }}
+      >
+        <h3>Config</h3>
+        <p>
+          <strong>Access token TTL</strong>: {config.accessTokenTTLsec} seconds
+        </p>
+        <p>
+          <strong>Refresh token TTL</strong>: {config.refreshTokenTTLsec}{' '}
+          seconds
+        </p>
+      </Container>
 
       <footer>
         <p className="author">
