@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
-import { User } from './types';
+import { getFingerprint } from '@thumbmarkjs/thumbmarkjs';
+import { Session, User } from './types';
 import { AccessTokenService } from './AccessTokenService';
 
 export class AuthAPI {
@@ -72,6 +73,7 @@ export class AuthAPI {
     }>('/auth/login', {
       email,
       password,
+      fingerPrint: await getFingerPrint(),
     });
 
     const accessToken = response.data.accessToken;
@@ -99,7 +101,9 @@ export class AuthAPI {
     const response = await this.axios.post<{
       accessToken: string;
       refreshToken: string;
-    }>('/auth/refresh-tokens');
+    }>('/auth/refresh-tokens', {
+      fingerPrint: await getFingerPrint(),
+    });
 
     const accessToken = response.data.accessToken;
     this.accessTokenStorage.set(accessToken);
@@ -109,8 +113,14 @@ export class AuthAPI {
   };
 
   logout = async () => {
-    await this.axios.post('/auth/logout');
-    this.accessTokenStorage.delete();
+    try {
+      await this.axios.post('/auth/logout');
+      this.accessTokenStorage.delete();
+      console.log('Logged out.');
+    } catch (error) {
+      console.error('Failed to logout', error);
+      this.accessTokenStorage.delete();
+    }
   };
 
   logoutAll = async () => {
@@ -125,11 +135,7 @@ export class AuthAPI {
 
   getActiveSessions = async () => {
     const response = await this.axios.get<{
-      sessions: {
-        ip: string;
-        userAgent: string;
-        createdAt: string;
-      }[];
+      sessions: Session[];
     }>('/auth/active-sessions');
     return response.data.sessions;
   };
@@ -142,3 +148,7 @@ export class AuthAPI {
     return response.data;
   };
 }
+
+const getFingerPrint = async (): Promise<string> => {
+  return getFingerprint(false) as Promise<string>;
+};

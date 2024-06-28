@@ -52,7 +52,9 @@ export const ProfilePage = () => {
 
               <p>
                 <strong>Created </strong>:{' '}
-                {new Date(session.createdAt).toLocaleString()}
+                {new Date(session.createdAt).toLocaleString()}{' '}
+                <strong>Updated </strong>:{' '}
+                {new Date(session.updatedAt).toLocaleString()}
               </p>
             </Paper>
           </li>

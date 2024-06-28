@@ -13,4 +13,5 @@ export type Session = {
   ip: string;
   userAgent: string;
   createdAt: string;
+  updatedAt: string;
 };
