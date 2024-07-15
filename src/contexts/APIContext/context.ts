@@ -27,15 +27,11 @@ instance.interceptors.response.use(
   { synchronous: true }
 );
 
-interface IAPIContext {
-  authAPI: AuthAPI;
-}
-
 export const api = {
   authAPI,
 };
 
-export const APIContext = createContext<IAPIContext>(api);
+export const APIContext = createContext(api);
 
 export const useAPIContext = () => {
   return useContext(APIContext);

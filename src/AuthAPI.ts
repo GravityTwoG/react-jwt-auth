@@ -1,5 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { getFingerprint } from '@thumbmarkjs/thumbmarkjs';
+
 import { Session, User } from './types';
 import { AccessTokenService } from './AccessTokenService';
 
@@ -77,7 +78,37 @@ export class AuthAPI {
     });
 
     const accessToken = response.data.accessToken;
+    this.accessTokenStorage.set(accessToken);
 
+    return response.data.user;
+  };
+
+  getGoogleConsentURL = async (redirectURL: string) => {
+    const response = await this.axios.get<{
+      redirectURL: string;
+    }>(`/auth/google/consent?redirectURL=${redirectURL}`);
+    return response.data.redirectURL;
+  };
+
+  registerWithGoogle = async (code: string, redirectURL: string) => {
+    const response = await this.axios.post('/auth/google/register-callback', {
+      code,
+      redirectURL,
+    });
+    return response.data;
+  };
+
+  loginWithGoogle = async (code: string, redirectURL: string) => {
+    const response = await this.axios.post<{
+      user: User;
+      accessToken: string;
+    }>('/auth/google/login-callback', {
+      code,
+      fingerPrint: await getFingerPrint(),
+      redirectURL,
+    });
+
+    const accessToken = response.data.accessToken;
     this.accessTokenStorage.set(accessToken);
 
     return response.data.user;

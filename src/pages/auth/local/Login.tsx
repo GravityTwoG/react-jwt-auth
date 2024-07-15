@@ -1,12 +1,13 @@
 import { useForm, useFormState } from 'react-hook-form';
 
-import classes from './auth.module.css';
+import classes from '../auth.module.css';
 
-import { APIError } from '../APIError';
-import { useAuthContext } from '../contexts/AuthContext/context';
+import { APIError } from '../../../APIError';
+import { useAuthContext } from '../../../contexts/AuthContext/context';
 
-import { Container } from '../components/Container/Container';
-import { Label } from '../components/Label';
+import { Container } from '../../../components/Container/Container';
+import { Label } from '../../../components/Label';
+import { GoogleConsentURLButton } from '../../../components/GoogleConsentURLButton';
 
 type FormData = {
   email: string;
@@ -74,6 +75,12 @@ export const LoginPage = () => {
         <button type="submit" disabled={isSubmitting} className="bg-blue-500">
           Login
         </button>
+
+        <GoogleConsentURLButton
+          disabled={isSubmitting}
+          redirectPath="/login/google"
+          children="Login with Google"
+        />
 
         <p>
           Don't have an account?{' '}

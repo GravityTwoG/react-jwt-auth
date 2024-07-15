@@ -46,6 +46,31 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
     [authAPI]
   );
 
+  const registerWithGoogle = useCallback(
+    async (code: string, redirectURL: string) => {
+      await authAPI.registerWithGoogle(code, redirectURL);
+    },
+    [authAPI]
+  );
+
+  const requestLoginWithGoogle = useCallback(
+    async (redirectURL: string) => {
+      const googleRedirectURL = await authAPI.getGoogleConsentURL(redirectURL);
+
+      return googleRedirectURL;
+    },
+    [authAPI]
+  );
+
+  const loginWithGoogle = useCallback(
+    async (code: string, redirectURL: string) => {
+      const user = await authAPI.loginWithGoogle(code, redirectURL);
+      setUser(user);
+      setAuthStatus(AuthStatus.AUTHENTICATED);
+    },
+    [authAPI]
+  );
+
   const logout = useCallback(async () => {
     await authAPI.logout();
     setUser(defaultUser);
@@ -68,10 +93,18 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
       value={{
         user,
         authStatus,
+
         register,
         login,
+
+        registerWithGoogle,
+
+        requestLoginWithGoogle,
+        loginWithGoogle,
+
         logout,
         logoutAll,
+
         getActiveSessions: authAPI.getActiveSessions,
       }}
     >
