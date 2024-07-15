@@ -6,6 +6,7 @@ import { APIError } from '../APIError';
 import { useAuthContext } from '../contexts/AuthContext/context';
 
 import { Container } from '../components/Container/Container';
+import { Label } from '../components/Label';
 
 type FormData = {
   email: string;
@@ -47,49 +48,49 @@ export const RegisterPage = () => {
 
   return (
     <Container className={classes.AuthPage}>
-      <h1>Register</h1>
+      <h1 className="text-5xl leading-snug">Register</h1>
 
       <form onSubmit={onSubmit}>
         <div>
-          <label>
-            <p>Email</p>
+          <Label label="Email">
             <input
               type="text"
               {...register('email', { required: 'Email is required' })}
             />
-          </label>
-          <p className="error">{errors.email?.message}</p>
+          </Label>
+          <p className="text-red-500">{errors.email?.message}</p>
         </div>
 
         <div>
-          <label>
-            <p>Password</p>
+          <Label label="Password">
             <input
               type="password"
               {...register('password', { required: 'Password is required' })}
             />
-          </label>
-          <p className="error">{errors.password?.message}</p>
+          </Label>
+          <p className="text-red-500">{errors.password?.message}</p>
         </div>
 
         <div>
-          <label>
-            <p>Confirm Password</p>
+          <Label label="Confirm Password">
             <input
               type="password"
               {...register('password2', { required: 'Confirm password' })}
             />
-          </label>
-          <p className="error">{errors.password2?.message}</p>
-          <p className="error">{errors.root?.message}</p>
+          </Label>
+          <p className="text-red-500">{errors.password2?.message}</p>
+          <p className="text-red-500">{errors.root?.message}</p>
         </div>
 
-        <button type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={isSubmitting} className="bg-blue-500">
           Register
         </button>
 
         <p>
-          Already have an account? <a href="/login">Login</a>
+          Already have an account?{' '}
+          <a href="/login" className="underline font-bold hover:no-underline">
+            Login
+          </a>
         </p>
       </form>
     </Container>

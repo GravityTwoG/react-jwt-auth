@@ -6,6 +6,7 @@ import { APIError } from '../APIError';
 import { useAuthContext } from '../contexts/AuthContext/context';
 
 import { Container } from '../components/Container/Container';
+import { Label } from '../components/Label';
 
 type FormData = {
   email: string;
@@ -46,38 +47,42 @@ export const LoginPage = () => {
 
   return (
     <Container className={classes.AuthPage}>
-      <h1>Login</h1>
+      <h1 className="text-5xl leading-snug">Login</h1>
 
       <form onSubmit={onSubmit}>
         <div>
-          <label>
-            <p>Email</p>
+          <Label label="Email">
             <input
               type="text"
               {...register('email', { required: 'Email is required' })}
             />
-          </label>
-          <p className="error">{errors.email?.message}</p>
+          </Label>
+          <p className="text-red-500">{errors.email?.message}</p>
         </div>
 
         <div>
-          <label>
-            <p>Password</p>
+          <Label label="Password">
             <input
               type="password"
               {...register('password', { required: 'Password is required' })}
             />
-          </label>
-          <p className="error">{errors.password?.message}</p>
-          <p className="error">{errors.root?.message}</p>
+          </Label>
+          <p className="text-red-500">{errors.password?.message}</p>
+          <p className="text-red-500">{errors.root?.message}</p>
         </div>
 
-        <button type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={isSubmitting} className="bg-blue-500">
           Login
         </button>
 
         <p>
-          Don't have an account? <a href="/register">Register</a>
+          Don't have an account?{' '}
+          <a
+            href="/register"
+            className="underline font-bold hover:no-underline"
+          >
+            Register
+          </a>
         </p>
       </form>
     </Container>

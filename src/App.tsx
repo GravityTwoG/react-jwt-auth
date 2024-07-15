@@ -31,31 +31,37 @@ export function App() {
 
   if (authStatus === AuthStatus.LOADING) {
     return (
-      <div className="App">
-        <div className="Loader">Loading...</div>
+      <div className="App py-16 flex flex-col items-stretch">
+        <div className="m-auto text-center">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="App">
+    <div className="App py-16 flex flex-col items-stretch">
       <Container>
-        <nav>
-          <p>JWT Auth Example</p>
+        <nav className="mb-16 rounded-xl border border-gray-300 px-8 py-4 flex items-center justify-between gap-12">
+          <p className="text-2xl font-bold leading-none">JWT Auth Example</p>
 
-          <ul>
+          <ul className="flex flex-wrap items-center justify-center gap-8">
             {authStatus === AuthStatus.AUTHENTICATED && (
               <li>
-                <Link to={'/'}>Profile</Link>
+                <Link to={'/'} className="text-xl hover:underline">
+                  Profile
+                </Link>
               </li>
             )}
             {authStatus === AuthStatus.ANONYMOUS && (
               <>
                 <li>
-                  <Link to={'/login'}>Login</Link>
+                  <Link to={'/login'} className="text-xl hover:underline">
+                    Login
+                  </Link>
                 </li>
                 <li>
-                  <Link to={'/register'}>Register</Link>
+                  <Link to={'/register'} className="text-xl hover:underline">
+                    Register
+                  </Link>
                 </li>
               </>
             )}
@@ -63,7 +69,7 @@ export function App() {
         </nav>
       </Container>
 
-      <main>
+      <main className="flex-1">
         <Router>
           <Switch>
             <Route path={'/'} component={profilePage} />
@@ -82,7 +88,7 @@ export function App() {
           marginTop: '1rem',
         }}
       >
-        <h3>Config</h3>
+        <h3 className="text-2xl leading-snug">Config</h3>
         <p>
           <strong>Access token TTL</strong>: {config.accessTokenTTLsec} seconds
         </p>
@@ -92,23 +98,32 @@ export function App() {
         </p>
       </Container>
 
-      <footer>
-        <p className="author">
+      <footer className="mt-auto pt-2 text-center">
+        <p>
           Created by:{' '}
-          <a target="_blank" href="https://github.com/GravityTwoG">
+          <a
+            className="underline font-bold hover:no-underline"
+            target="_blank"
+            href="https://github.com/GravityTwoG"
+          >
             GravityTwoG
           </a>
         </p>
 
-        <p className="sources">
+        <p className="mt-2 inline-flex items-center justify-start gap-4">
           <a
+            className="underline font-bold hover:no-underline"
             target="_blank"
             href="https://github.com/GravityTwoG/react-jwt-auth"
           >
             Frontend
           </a>
 
-          <a target="_blank" href="https://github.com/GravityTwoG/go-jwt-auth">
+          <a
+            className="underline font-bold hover:no-underline"
+            target="_blank"
+            href="https://github.com/GravityTwoG/go-jwt-auth"
+          >
             Backend
           </a>
         </p>

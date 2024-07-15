@@ -22,7 +22,7 @@ export const ProfilePage = () => {
 
   return (
     <Container>
-      <h1>Profile</h1>
+      <h1 className="text-5xl leading-snug">Profile</h1>
 
       <Paper className={classes.User}>
         <p>
@@ -36,7 +36,9 @@ export const ProfilePage = () => {
       <div className={classes.SessionsHeader}>
         <h2>Active sessions</h2>
 
-        <button onClick={onUpdate}>Update</button>
+        <button className="block px-2 py-1 border" onClick={onUpdate}>
+          Update
+        </button>
       </div>
 
       <ul className={classes.Sessions}>
@@ -61,13 +63,16 @@ export const ProfilePage = () => {
         ))}
       </ul>
 
-      <div style={{ marginTop: '2rem' }}>
-        <button className={classes.LogoutButton} onClick={logoutAll}>
+      <div className="mt-8">
+        <button
+          className="block mx-auto max-w-48 bg-blue-500"
+          onClick={logoutAll}
+        >
           Logout all
         </button>
       </div>
-      <div style={{ marginTop: '1rem' }}>
-        <button className={classes.LogoutButton} onClick={logout}>
+      <div className="mt-4">
+        <button className="block mx-auto max-w-48 bg-blue-500" onClick={logout}>
           Logout
         </button>
       </div>
