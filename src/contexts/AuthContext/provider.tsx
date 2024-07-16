@@ -29,8 +29,7 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
 
   const register = useCallback(
     async (email: string, password: string, password2: string) => {
-      await authAPI.register(email, password, password2);
-      const user = await authAPI.login(email, password);
+      const user = await authAPI.register(email, password, password2);
       setUser(user);
       setAuthStatus(AuthStatus.AUTHENTICATED);
     },
@@ -48,7 +47,9 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
 
   const registerWithGoogle = useCallback(
     async (code: string, redirectURL: string) => {
-      await authAPI.registerWithGoogle(code, redirectURL);
+      const user = await authAPI.registerWithGoogle(code, redirectURL);
+      setUser(user);
+      setAuthStatus(AuthStatus.AUTHENTICATED);
     },
     [authAPI]
   );

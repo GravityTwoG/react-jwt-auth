@@ -4,6 +4,11 @@ import { getFingerprint } from '@thumbmarkjs/thumbmarkjs';
 import { Session, User } from './types';
 import { AccessTokenService } from './AccessTokenService';
 
+type AuthenticateResponseDTO = {
+  user: User;
+  accessToken: string;
+};
+
 export class AuthAPI {
   private readonly axios: AxiosInstance;
   private readonly accessTokenStorage: AccessTokenService;
@@ -59,23 +64,31 @@ export class AuthAPI {
   };
 
   register = async (email: string, password: string, password2: string) => {
-    const response = await this.axios.post('/auth/register', {
-      email,
-      password,
-      password2,
-    });
-    return response.data;
+    const response = await this.axios.post<AuthenticateResponseDTO>(
+      '/auth/register',
+      {
+        email,
+        password,
+        password2,
+        fingerPrint: await getFingerPrint(),
+      }
+    );
+
+    const accessToken = response.data.accessToken;
+    this.accessTokenStorage.set(accessToken);
+
+    return response.data.user;
   };
 
   login = async (email: string, password: string) => {
-    const response = await this.axios.post<{
-      user: User;
-      accessToken: string;
-    }>('/auth/login', {
-      email,
-      password,
-      fingerPrint: await getFingerPrint(),
-    });
+    const response = await this.axios.post<AuthenticateResponseDTO>(
+      '/auth/login',
+      {
+        email,
+        password,
+        fingerPrint: await getFingerPrint(),
+      }
+    );
 
     const accessToken = response.data.accessToken;
     this.accessTokenStorage.set(accessToken);
@@ -91,22 +104,30 @@ export class AuthAPI {
   };
 
   registerWithGoogle = async (code: string, redirectURL: string) => {
-    const response = await this.axios.post('/auth/google/register-callback', {
-      code,
-      redirectURL,
-    });
-    return response.data;
+    const response = await this.axios.post<AuthenticateResponseDTO>(
+      '/auth/google/register-callback',
+      {
+        code,
+        fingerPrint: await getFingerPrint(),
+        redirectURL,
+      }
+    );
+
+    const accessToken = response.data.accessToken;
+    this.accessTokenStorage.set(accessToken);
+
+    return response.data.user;
   };
 
   loginWithGoogle = async (code: string, redirectURL: string) => {
-    const response = await this.axios.post<{
-      user: User;
-      accessToken: string;
-    }>('/auth/google/login-callback', {
-      code,
-      fingerPrint: await getFingerPrint(),
-      redirectURL,
-    });
+    const response = await this.axios.post<AuthenticateResponseDTO>(
+      '/auth/google/login-callback',
+      {
+        code,
+        fingerPrint: await getFingerPrint(),
+        redirectURL,
+      }
+    );
 
     const accessToken = response.data.accessToken;
     this.accessTokenStorage.set(accessToken);
