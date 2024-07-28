@@ -1,20 +1,21 @@
 import { useEffect } from 'react';
-import { useAuthContext } from './contexts/AuthContext/context';
 import { navigate } from 'wouter/use-browser-location';
-import { AuthStatus } from './types';
 
-export const anonymousPage = (Component: React.FunctionComponent) => {
+import { useAuthContext } from '../../contexts/AuthContext/context';
+import { AuthStatus } from '../../types';
+
+export const privatePage = (Component: React.FunctionComponent) => {
   return () => {
     const { authStatus } = useAuthContext();
     useEffect(() => {
-      if (authStatus === AuthStatus.AUTHENTICATED) {
-        navigate('/');
+      if (authStatus === AuthStatus.ANONYMOUS) {
+        navigate('/login');
       }
     }, [authStatus]);
 
     if (
       authStatus === AuthStatus.LOADING ||
-      authStatus === AuthStatus.AUTHENTICATED
+      authStatus === AuthStatus.ANONYMOUS
     ) {
       return null;
     }

@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
 
 import axios from 'axios';
-import { AuthAPI } from '../../AuthAPI';
-import { APIError } from '../../APIError';
+import { AuthAPI } from '../../api/AuthAPI';
+import { APIError } from '../../api/APIError';
 
 const instance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,

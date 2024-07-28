@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { getFingerprint } from '@thumbmarkjs/thumbmarkjs';
 
-import { Session, User } from './types';
+import { Session, User } from '../types';
 import { AccessTokenService } from './AccessTokenService';
 
 type AuthenticateResponseDTO = {

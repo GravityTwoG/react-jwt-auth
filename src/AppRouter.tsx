@@ -1,5 +1,5 @@
-import { anonymousPage } from './anonymousPage';
-import { privatePage } from './privatePage';
+import { privatePage } from './components/hocs/privatePage';
+import { anonymousPage } from './components/hocs/anonymousPage';
 
 import { Router, Route, Switch } from 'wouter';
 

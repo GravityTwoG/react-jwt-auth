@@ -2,7 +2,7 @@ import { useForm, useFormState } from 'react-hook-form';
 
 import classes from '../auth.module.css';
 
-import { APIError } from '../../../APIError';
+import { APIError } from '../../../api/APIError';
 import { useAuthContext } from '../../../contexts/AuthContext/context';
 
 import { Container } from '../../../components/Container/Container';
