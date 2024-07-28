@@ -89,6 +89,12 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
     }
   }, [authAPI]);
 
+  const deleteUser = useCallback(async () => {
+    await authAPI.deleteUser();
+    setUser(defaultUser);
+    setAuthStatus(AuthStatus.ANONYMOUS);
+  }, [authAPI]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -105,6 +111,7 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
 
         logout,
         logoutAll,
+        deleteUser,
 
         getActiveSessions: authAPI.getActiveSessions,
       }}

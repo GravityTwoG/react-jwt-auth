@@ -180,6 +180,11 @@ export class AuthAPI {
     this.accessTokenStorage.delete();
   };
 
+  deleteUser = async () => {
+    await this.axios.post('/auth/delete-user');
+    this.accessTokenStorage.delete();
+  };
+
   me = async () => {
     const response = await this.axios.get<User>('/auth/me');
     return response.data;

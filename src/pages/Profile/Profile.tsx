@@ -9,7 +9,8 @@ import { Container } from '../../components/Container/Container';
 import { Paper } from '../../components/Paper/Paper';
 
 export const ProfilePage = () => {
-  const { user, getActiveSessions, logout, logoutAll } = useAuthContext();
+  const { user, getActiveSessions, logout, logoutAll, deleteUser } =
+    useAuthContext();
   const [activeSessions, setActiveSessions] = useState<Session[]>([]);
 
   useEffect(() => {
@@ -74,6 +75,15 @@ export const ProfilePage = () => {
       <div className="mt-4">
         <button className="block mx-auto max-w-48 bg-blue-500" onClick={logout}>
           Logout
+        </button>
+      </div>
+      <div className="mt-4">
+        <button
+          className="flex flex-col items-center justify-center mx-auto max-w-48 bg-red-500"
+          onDoubleClick={deleteUser}
+        >
+          <p>Delete account</p>
+          <p className="text-xs text-gray-300">Double click to delete.</p>
         </button>
       </div>
     </Container>

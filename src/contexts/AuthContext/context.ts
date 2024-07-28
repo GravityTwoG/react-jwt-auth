@@ -19,6 +19,7 @@ interface IAuthContext {
 
   logout: () => Promise<void>;
   logoutAll: () => Promise<void>;
+  deleteUser: () => Promise<void>;
 
   getActiveSessions: () => Promise<Session[]>;
 }
@@ -39,6 +40,7 @@ export const AuthContext = createContext<IAuthContext>({
 
   logout: async () => {},
   logoutAll: async () => {},
+  deleteUser: async () => {},
 
   getActiveSessions: async () => {
     return [];
