@@ -7,6 +7,8 @@ import { Session } from '../../types';
 
 import { Container } from '../../components/Container/Container';
 import { Paper } from '../../components/Paper/Paper';
+import { Button } from '../../components/Button';
+import { H1 } from '../../components/Typography';
 
 export const ProfilePage = () => {
   const { user, getActiveSessions, logout, logoutAll, deleteUser } =
@@ -22,8 +24,8 @@ export const ProfilePage = () => {
   };
 
   return (
-    <Container>
-      <h1 className="text-5xl leading-snug">Profile</h1>
+    <Container className={classes.ProfilePage}>
+      <H1>Profile</H1>
 
       <Paper className={classes.User}>
         <p>
@@ -64,27 +66,18 @@ export const ProfilePage = () => {
         ))}
       </ul>
 
-      <div className="mt-8">
-        <button
-          className="block mx-auto max-w-48 bg-blue-500"
-          onClick={logoutAll}
-        >
-          Logout all
-        </button>
-      </div>
-      <div className="mt-4">
-        <button className="block mx-auto max-w-48 bg-blue-500" onClick={logout}>
-          Logout
-        </button>
-      </div>
-      <div className="mt-4">
-        <button
-          className="flex flex-col items-center justify-center mx-auto max-w-48 bg-red-500"
+      <div className="mt-8 mx-auto max-w-48 flex flex-col items-center justify-center gap-4">
+        <Button onClick={logoutAll}>Logout all</Button>
+
+        <Button onClick={logout}>Logout</Button>
+
+        <Button
+          className="flex flex-col items-center justify-center bg-red-500 hover:bg-red-700 py-1"
           onDoubleClick={deleteUser}
         >
-          <p>Delete account</p>
-          <p className="text-xs text-gray-300">Double click to delete.</p>
-        </button>
+          <p className="leading-none">Delete account</p>
+          <p className="text-[10px] text-slate-200">Double click to delete.</p>
+        </Button>
       </div>
     </Container>
   );

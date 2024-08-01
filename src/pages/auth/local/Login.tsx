@@ -8,6 +8,9 @@ import { useAuthContext } from '../../../contexts/AuthContext/context';
 import { Container } from '../../../components/Container/Container';
 import { Label } from '../../../components/Label';
 import { GoogleConsentURLButton } from '../../../components/GoogleConsentURLButton';
+import { Button } from '../../../components/Button';
+import { Form } from '../../../components/Form';
+import { H1 } from '../../../components/Typography';
 
 type FormData = {
   email: string;
@@ -48,9 +51,9 @@ export const LoginPage = () => {
 
   return (
     <Container className={classes.AuthPage}>
-      <h1 className="text-5xl leading-snug">Login</h1>
+      <H1>Login</H1>
 
-      <form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit}>
         <div>
           <Label label="Email">
             <input
@@ -72,9 +75,9 @@ export const LoginPage = () => {
           <p className="text-red-500">{errors.root?.message}</p>
         </div>
 
-        <button type="submit" disabled={isSubmitting} className="bg-blue-500">
+        <Button type="submit" disabled={isSubmitting}>
           Login
-        </button>
+        </Button>
 
         <GoogleConsentURLButton
           disabled={isSubmitting}
@@ -91,7 +94,7 @@ export const LoginPage = () => {
             Register
           </a>
         </p>
-      </form>
+      </Form>
     </Container>
   );
 };

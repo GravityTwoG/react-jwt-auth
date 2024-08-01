@@ -1,5 +1,6 @@
 import { useAuthContext } from '../contexts/AuthContext/context';
 import { getRedirectURL } from '../getRedirectURL';
+import { Button } from './Button';
 
 export type LoginWithGoogleButtonProps = {
   disabled: boolean;
@@ -22,13 +23,13 @@ export const GoogleConsentURLButton = (props: LoginWithGoogleButtonProps) => {
   };
 
   return (
-    <button
+    <Button
       type="button"
       onClick={onClick}
       disabled={props.disabled}
-      className="bg-red-500"
+      className="bg-red-500 hover:bg-red-400"
     >
       {props.children}
-    </button>
+    </Button>
   );
 };

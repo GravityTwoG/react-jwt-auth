@@ -14,7 +14,7 @@ export const ConfigView = () => {
   }, [authAPI]);
 
   return (
-    <div>
+    <div className="rounded-xl border border-gray-300 px-8 py-4">
       <h3 className="text-2xl leading-snug">Config</h3>
       <p>
         <strong>Access token TTL</strong>: {config.accessTokenTTLsec} seconds

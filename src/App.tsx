@@ -18,12 +18,12 @@ export function App() {
   }
 
   return (
-    <div className="App py-16 flex flex-col items-stretch">
+    <div className="App pb-16 flex flex-col items-stretch">
       <Container>
-        <nav className="mb-16 rounded-xl border border-gray-300 px-8 py-4 flex items-center justify-between gap-12">
+        <nav className="mb-16 w-[480px] max-w-full rounded-b-xl border border-t-0 border-gray-300 px-8 pt-3 pb-4 flex items-center justify-between gap-12">
           <p className="text-2xl font-bold leading-none">JWT Auth Example</p>
 
-          <ul className="flex flex-wrap items-center justify-center gap-8">
+          <ul className="flex flex-wrap items-center justify-center gap-4">
             {authStatus === AuthStatus.AUTHENTICATED && (
               <li>
                 <Link to={'/'} className="text-xl hover:underline">
@@ -49,11 +49,11 @@ export function App() {
         </nav>
       </Container>
 
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col items-center justify-center">
         <AppRouter />
       </main>
 
-      <Container className="mt-4">
+      <Container className="my-4">
         <ConfigView />
       </Container>
 
