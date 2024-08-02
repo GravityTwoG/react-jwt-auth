@@ -12,10 +12,17 @@ interface IAuthContext {
   ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
 
-  registerWithGoogle: (code: string, redirectURL: string) => Promise<void>;
-
-  requestLoginWithGoogle: (redirectURL: string) => Promise<string>;
-  loginWithGoogle: (code: string, redirectURL: string) => Promise<void>;
+  requestConsentURL: (provider: string, redirectURL: string) => Promise<string>;
+  registerWithOAuth: (
+    provider: string,
+    code: string,
+    redirectURL: string
+  ) => Promise<void>;
+  loginWithOAuth: (
+    provider: string,
+    code: string,
+    redirectURL: string
+  ) => Promise<void>;
 
   logout: () => Promise<void>;
   logoutAll: () => Promise<void>;
@@ -33,10 +40,10 @@ export const AuthContext = createContext<IAuthContext>({
   register: async () => {},
   login: async () => {},
 
-  registerWithGoogle: async () => {},
+  registerWithOAuth: async () => {},
 
-  requestLoginWithGoogle: async () => '',
-  loginWithGoogle: async () => {},
+  requestConsentURL: async () => '',
+  loginWithOAuth: async () => {},
 
   logout: async () => {},
   logoutAll: async () => {},

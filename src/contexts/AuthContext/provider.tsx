@@ -45,27 +45,30 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
     [authAPI]
   );
 
-  const registerWithGoogle = useCallback(
-    async (code: string, redirectURL: string) => {
-      const user = await authAPI.registerWithGoogle(code, redirectURL);
+  const registerWithOAuth = useCallback(
+    async (provider: string, code: string, redirectURL: string) => {
+      const user = await authAPI.registerWithOAuth(provider, code, redirectURL);
       setUser(user);
       setAuthStatus(AuthStatus.AUTHENTICATED);
     },
     [authAPI]
   );
 
-  const requestLoginWithGoogle = useCallback(
-    async (redirectURL: string) => {
-      const googleRedirectURL = await authAPI.getGoogleConsentURL(redirectURL);
+  const requestConsentURL = useCallback(
+    async (provider: string, redirectURL: string) => {
+      const googleRedirectURL = await authAPI.getConsentURL(
+        provider,
+        redirectURL
+      );
 
       return googleRedirectURL;
     },
     [authAPI]
   );
 
-  const loginWithGoogle = useCallback(
-    async (code: string, redirectURL: string) => {
-      const user = await authAPI.loginWithGoogle(code, redirectURL);
+  const loginWithOAuth = useCallback(
+    async (provider: string, code: string, redirectURL: string) => {
+      const user = await authAPI.loginWithOAuth(provider, code, redirectURL);
       setUser(user);
       setAuthStatus(AuthStatus.AUTHENTICATED);
     },
@@ -104,10 +107,10 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
         register,
         login,
 
-        registerWithGoogle,
+        registerWithOAuth: registerWithOAuth,
 
-        requestLoginWithGoogle,
-        loginWithGoogle,
+        requestConsentURL: requestConsentURL,
+        loginWithOAuth: loginWithOAuth,
 
         logout,
         logoutAll,

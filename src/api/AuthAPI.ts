@@ -96,16 +96,20 @@ export class AuthAPI {
     return response.data.user;
   };
 
-  getGoogleConsentURL = async (redirectURL: string) => {
+  getConsentURL = async (provider: string, redirectURL: string) => {
     const response = await this.axios.get<{
       redirectURL: string;
-    }>(`/auth/google/consent?redirectURL=${redirectURL}`);
+    }>(`/auth/${provider}/consent?redirectURL=${redirectURL}`);
     return response.data.redirectURL;
   };
 
-  registerWithGoogle = async (code: string, redirectURL: string) => {
+  registerWithOAuth = async (
+    provider: string,
+    code: string,
+    redirectURL: string
+  ) => {
     const response = await this.axios.post<AuthenticateResponseDTO>(
-      '/auth/google/register-callback',
+      `/auth/${provider}/register-callback`,
       {
         code,
         fingerPrint: await getFingerPrint(),
@@ -119,9 +123,13 @@ export class AuthAPI {
     return response.data.user;
   };
 
-  loginWithGoogle = async (code: string, redirectURL: string) => {
+  loginWithOAuth = async (
+    provider: string,
+    code: string,
+    redirectURL: string
+  ) => {
     const response = await this.axios.post<AuthenticateResponseDTO>(
-      '/auth/google/login-callback',
+      `/auth/${provider}/login-callback`,
       {
         code,
         fingerPrint: await getFingerPrint(),

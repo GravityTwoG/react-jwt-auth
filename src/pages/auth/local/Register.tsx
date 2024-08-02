@@ -11,6 +11,7 @@ import { GoogleConsentURLButton } from '../../../components/GoogleConsentURLButt
 import { Button } from '../../../components/Button';
 import { Form } from '../../../components/Form';
 import { H1 } from '../../../components/Typography';
+import { GithubConsentURLButton } from '../../../components/GithubConsentURLButton';
 
 type FormData = {
   email: string;
@@ -94,6 +95,11 @@ export const RegisterPage = () => {
           disabled={isSubmitting}
           redirectPath="/register/google"
           children="Register with Google"
+        />
+        <GithubConsentURLButton
+          disabled={isSubmitting}
+          redirectPath="/register/github"
+          children="Register with Github"
         />
 
         <p>

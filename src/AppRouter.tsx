@@ -6,16 +6,18 @@ import { Router, Route, Switch } from 'wouter';
 import { RegisterPage } from './pages/auth/local/Register';
 import { LoginPage } from './pages/auth/local/Login';
 
-import { RegisterWithGooglePage } from './pages/auth/google/RegisterWithGoogle';
-import { LoginWithGooglePage } from './pages/auth/google/LoginWithGoogle';
+import { RegisterWithOAuthPage } from './pages/auth/oauth/RegisterWithOAuth';
+import { LoginWithOAuthPage } from './pages/auth/oauth/LoginWithOAuth';
 
 import { ProfilePage } from './pages/Profile/Profile';
 
 const profilePage = privatePage(ProfilePage);
-const loginPage = anonymousPage(LoginPage);
-const registerWithGooglePage = anonymousPage(RegisterWithGooglePage);
-const loginWithGooglePage = anonymousPage(LoginWithGooglePage);
+
 const registerPage = anonymousPage(RegisterPage);
+const loginPage = anonymousPage(LoginPage);
+
+const registerWithOAuthPage = anonymousPage(RegisterWithOAuthPage);
+const loginWithOAuthPage = anonymousPage(LoginWithOAuthPage);
 
 export const AppRouter = () => {
   return (
@@ -25,8 +27,8 @@ export const AppRouter = () => {
         <Route path={'/register'} component={registerPage} />
         <Route path={'/login'} component={loginPage} />
 
-        <Route path={'/register/google'} component={registerWithGooglePage} />
-        <Route path={'/login/google'} component={loginWithGooglePage} />
+        <Route path={'/register/:provider'} component={registerWithOAuthPage} />
+        <Route path={'/login/:provider'} component={loginWithOAuthPage} />
 
         <Route>
           <h1>Page not found</h1>

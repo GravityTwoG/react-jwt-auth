@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useParams } from 'wouter';
 
 import classes from '../auth.module.css';
 
@@ -7,8 +8,10 @@ import { getRedirectURL } from '../../../getRedirectURL';
 
 import { Container } from '../../../components/Container/Container';
 
-export const RegisterWithGooglePage = () => {
-  const { registerWithGoogle } = useAuthContext();
+export const RegisterWithOAuthPage = () => {
+  const { registerWithOAuth } = useAuthContext();
+
+  const provider = useParams<{ provider: string }>().provider;
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
@@ -26,7 +29,11 @@ export const RegisterWithGooglePage = () => {
       try {
         setError('');
         setIsLoading(true);
-        await registerWithGoogle(code, getRedirectURL('/register/google'));
+        await registerWithOAuth(
+          provider,
+          code,
+          getRedirectURL(`/register/${provider}`)
+        );
       } catch (error) {
         console.error(error);
         setError('Something went wrong. Please try again later.');
@@ -36,11 +43,13 @@ export const RegisterWithGooglePage = () => {
     }
 
     login();
-  }, [code, registerWithGoogle]);
+  }, [code, registerWithOAuth, provider]);
 
   return (
     <Container className={classes.AuthPage}>
-      <h1 className="text-5xl leading-snug">Registration with Google</h1>
+      <h1 className="text-5xl leading-snug">
+        Registration with {(provider || '').toUpperCase()}
+      </h1>
 
       {isLoading && <p className="text-gray-500 m-8">...</p>}
 

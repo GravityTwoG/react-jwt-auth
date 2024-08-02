@@ -11,6 +11,7 @@ import { GoogleConsentURLButton } from '../../../components/GoogleConsentURLButt
 import { Button } from '../../../components/Button';
 import { Form } from '../../../components/Form';
 import { H1 } from '../../../components/Typography';
+import { GithubConsentURLButton } from '../../../components/GithubConsentURLButton';
 
 type FormData = {
   email: string;
@@ -83,6 +84,11 @@ export const LoginPage = () => {
           disabled={isSubmitting}
           redirectPath="/login/google"
           children="Login with Google"
+        />
+        <GithubConsentURLButton
+          disabled={isSubmitting}
+          redirectPath="/login/github"
+          children="Login with Github"
         />
 
         <p>

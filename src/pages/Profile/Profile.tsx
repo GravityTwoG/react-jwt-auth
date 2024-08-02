@@ -75,7 +75,7 @@ export const ProfilePage = () => {
       </ul>
 
       <section className="mt-8">
-        <h2>Active sessions</h2>
+        <h2>Auth providers</h2>
 
         <Paper className="mt-4">
           <ul>
