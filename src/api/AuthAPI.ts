@@ -193,8 +193,13 @@ export class AuthAPI {
   getActiveSessions = async () => {
     const response = await this.axios.get<{
       sessions: Session[];
-    }>('/auth/active-sessions');
+    }>('/auth/me/active-sessions');
     return response.data.sessions;
+  };
+
+  getAuthProviders = async () => {
+    const response = await this.axios.get<string[]>('/auth/me/auth-providers');
+    return response.data;
   };
 
   getConfig = async () => {

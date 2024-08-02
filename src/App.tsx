@@ -20,7 +20,7 @@ export function App() {
   return (
     <div className="App pb-16 flex flex-col items-stretch">
       <Container>
-        <nav className="mb-16 w-[480px] max-w-full rounded-b-xl border border-t-0 border-gray-300 px-8 pt-3 pb-4 flex items-center justify-between gap-12">
+        <nav className="mb-12 w-[480px] max-w-full rounded-b-xl border border-t-0 border-gray-300 px-8 pt-3 pb-4 flex items-center justify-between gap-12">
           <p className="text-2xl font-bold leading-none">JWT Auth Example</p>
 
           <ul className="flex flex-wrap items-center justify-center gap-4">
@@ -53,11 +53,11 @@ export function App() {
         <AppRouter />
       </main>
 
-      <Container className="my-4">
+      <Container className="my-8">
         <ConfigView />
       </Container>
 
-      <footer className="mt-auto pt-2 text-center">
+      <footer className="mt-12 pt-2 text-center">
         <p>
           Created by:{' '}
           <a

@@ -29,7 +29,9 @@ export const LoginWithGooglePage = () => {
         await loginWithGoogle(code, getRedirectURL('/login/google'));
       } catch (error) {
         console.error(error);
-        setError('Something went wrong. Please try again later.');
+        setError(
+          'Something went wrong. Please try again later. Error: ' + error
+        );
       } finally {
         setIsLoading(false);
       }
@@ -44,7 +46,7 @@ export const LoginWithGooglePage = () => {
 
       {isLoading && <p className="text-gray-500 m-8">...</p>}
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="mt-4 text-red-500">{error}</p>}
     </Container>
   );
 };

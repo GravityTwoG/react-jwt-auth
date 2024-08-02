@@ -9,6 +9,7 @@ import { Container } from '../../components/Container/Container';
 import { Paper } from '../../components/Paper/Paper';
 import { Button } from '../../components/Button';
 import { H1 } from '../../components/Typography';
+import { useAPIContext } from '../../contexts/APIContext/context';
 
 export const ProfilePage = () => {
   const { user, getActiveSessions, logout, logoutAll, deleteUser } =
@@ -22,6 +23,13 @@ export const ProfilePage = () => {
   const onUpdate = () => {
     getActiveSessions().then(setActiveSessions).catch(console.error);
   };
+
+  const [authProviders, setAuthProviders] = useState<string[]>([]);
+  const { authAPI } = useAPIContext();
+
+  useEffect(() => {
+    authAPI.getAuthProviders().then(setAuthProviders).catch(console.error);
+  }, [authAPI]);
 
   return (
     <Container className={classes.ProfilePage}>
@@ -66,7 +74,19 @@ export const ProfilePage = () => {
         ))}
       </ul>
 
-      <div className="mt-8 mx-auto max-w-48 flex flex-col items-center justify-center gap-4">
+      <section className="mt-8">
+        <h2>Active sessions</h2>
+
+        <Paper className="mt-4">
+          <ul>
+            {authProviders.map((provider) => (
+              <li key={provider}>- {provider}</li>
+            ))}
+          </ul>
+        </Paper>
+      </section>
+
+      <div className="mt-8 mx-auto max-w-80 flex flex-col items-center justify-center gap-4">
         <Button onClick={logoutAll}>Logout all</Button>
 
         <Button onClick={logout}>Logout</Button>
