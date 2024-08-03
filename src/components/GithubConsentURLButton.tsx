@@ -1,5 +1,4 @@
-import { useAuthContext } from '../contexts/AuthContext/context';
-import { getRedirectURL } from '../getRedirectURL';
+import { useConsentURL } from '../hooks/useConsentURL';
 import { Button } from './Button';
 
 export type GithubConsentURLButtonProps = {
@@ -9,19 +8,10 @@ export type GithubConsentURLButtonProps = {
 };
 
 export const GithubConsentURLButton = (props: GithubConsentURLButtonProps) => {
-  const { requestConsentURL } = useAuthContext();
-
-  const onClick = async () => {
-    try {
-      const redirectURL = await requestConsentURL(
-        'github',
-        getRedirectURL(props.redirectPath)
-      );
-      window.location.href = redirectURL;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const onClick = useConsentURL({
+    redirectPath: props.redirectPath,
+    provider: 'github',
+  });
 
   return (
     <Button

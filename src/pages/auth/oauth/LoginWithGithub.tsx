@@ -1,5 +1,3 @@
-import { useParams } from 'wouter';
-
 import classes from '../auth.module.css';
 
 import { getRedirectURL } from '../../../getRedirectURL';
@@ -8,15 +6,15 @@ import { useLoginWithOAuth } from '../../../hooks/useLoginWithOAuth';
 import { Container } from '../../../components/Container/Container';
 import { H1 } from '../../../components/Typography';
 
-export const LoginWithOAuthPage = () => {
-  const provider = useParams<{ provider: string }>().provider;
-
+export const LoginWithGithubPage = () => {
   const code = new URLSearchParams(window.location.search).get('code') || '';
 
+  const provider = 'github';
+
   const [isLoading, error] = useLoginWithOAuth({
-    provider,
+    provider: 'github',
     code,
-    redirectPath: getRedirectURL(`/login/${provider}`),
+    redirectPath: getRedirectURL(`/register/github/login`),
   });
 
   return (

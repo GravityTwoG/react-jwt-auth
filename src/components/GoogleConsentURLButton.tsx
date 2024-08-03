@@ -1,5 +1,5 @@
-import { useAuthContext } from '../contexts/AuthContext/context';
-import { getRedirectURL } from '../getRedirectURL';
+import { useConsentURL } from '../hooks/useConsentURL';
+
 import { Button } from './Button';
 
 export type GoogleConsentURLButtonProps = {
@@ -9,19 +9,10 @@ export type GoogleConsentURLButtonProps = {
 };
 
 export const GoogleConsentURLButton = (props: GoogleConsentURLButtonProps) => {
-  const { requestConsentURL } = useAuthContext();
-
-  const onClick = async () => {
-    try {
-      const redirectURL = await requestConsentURL(
-        'google',
-        getRedirectURL(props.redirectPath)
-      );
-      window.location.href = redirectURL;
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const onClick = useConsentURL({
+    redirectPath: props.redirectPath,
+    provider: 'google',
+  });
 
   return (
     <Button

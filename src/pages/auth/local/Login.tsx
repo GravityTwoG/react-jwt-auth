@@ -87,7 +87,7 @@ export const LoginPage = () => {
         />
         <GithubConsentURLButton
           disabled={isSubmitting}
-          redirectPath="/login/github"
+          redirectPath="/register/github/login"
           children="Login with Github"
         />
 
