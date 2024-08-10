@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react';
-import { AuthStatus, Session, User } from '../../types';
+import { AuthStatus, Session, User } from '@/types';
 
 interface IAuthContext {
   user: User;

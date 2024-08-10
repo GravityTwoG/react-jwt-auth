@@ -1,16 +1,16 @@
-import { privatePage } from './components/hocs/privatePage';
-import { anonymousPage } from './components/hocs/anonymousPage';
+import { privatePage } from '../components/hocs/privatePage';
+import { anonymousPage } from '../components/hocs/anonymousPage';
 
 import { Router, Route, Switch } from 'wouter';
 
-import { RegisterPage } from './pages/auth/local/Register';
-import { LoginPage } from './pages/auth/local/Login';
+import { RegisterPage } from '../pages/auth/local/Register';
+import { LoginPage } from '../pages/auth/local/Login';
 
-import { RegisterWithOAuthPage } from './pages/auth/oauth/RegisterWithOAuth';
-import { LoginWithOAuthPage } from './pages/auth/oauth/LoginWithOAuth';
+import { RegisterWithOAuthPage } from '../pages/auth/oauth/RegisterWithOAuth';
+import { LoginWithOAuthPage } from '../pages/auth/oauth/LoginWithOAuth';
 
-import { ProfilePage } from './pages/Profile/Profile';
-import { ConnectOAuthPage } from './pages/auth/oauth/ConnectOAuth';
+import { ProfilePage } from '../pages/Profile/Profile';
+import { ConnectOAuthPage } from '../pages/auth/oauth/ConnectOAuth';
 
 const profilePage = privatePage(ProfilePage);
 

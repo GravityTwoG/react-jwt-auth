@@ -1,5 +1,5 @@
-import { useAuthContext } from '../contexts/AuthContext/context';
-import { getRedirectURL } from '../utils';
+import { useAuthContext } from '@/contexts/AuthContext/context';
+import { getRedirectURL } from '@/utils';
 
 export type useConsentURLArgs = {
   redirectPath: string;

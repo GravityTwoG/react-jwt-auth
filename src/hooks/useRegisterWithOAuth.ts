@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuthContext } from '../contexts/AuthContext/context';
+import { useAuthContext } from '@/contexts/AuthContext/context';
 
 export type useRegisterWithOAuthArgs = {
   provider: string;

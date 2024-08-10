@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom/client';
 
-import { App } from './App.tsx';
-import './index.css';
+import { App } from './app/App.tsx';
+import './app/index.css';
 
 import { APIContextProvider } from './contexts/APIContext/provider.tsx';
 import { AuthContextProvider } from './contexts/AuthContext/provider.tsx';

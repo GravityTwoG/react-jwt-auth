@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { navigate } from 'wouter/use-browser-location';
 
-import { useAuthContext } from '../../contexts/AuthContext/context';
-import { AuthStatus } from '../../types';
+import { useAuthContext } from '@/contexts/AuthContext/context';
+import { AuthStatus } from '@/types';
 
 export const anonymousPage = (Component: React.FunctionComponent) => {
   return () => {

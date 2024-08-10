@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { AuthContext } from './context';
 
-import { AuthStatus, User } from '../../types';
+import { AuthStatus, User } from '@/types';
 import { useAPIContext } from '../APIContext/context';
 
 const defaultUser: User = {

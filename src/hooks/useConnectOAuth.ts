@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { navigate } from 'wouter/use-browser-location';
 
-import { useAuthContext } from '../contexts/AuthContext/context';
+import { useAuthContext } from '@/contexts/AuthContext/context';
 
 export type useLoginWithOAuthArgs = {
   provider: string;

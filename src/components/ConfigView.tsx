@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAPIContext } from '../contexts/APIContext/context';
+import { useAPIContext } from '@/contexts/APIContext/context';
 
 export const ConfigView = () => {
   const { authAPI } = useAPIContext();

@@ -2,16 +2,16 @@ import { useForm, useFormState } from 'react-hook-form';
 
 import classes from '../auth.module.css';
 
-import { APIError } from '../../../api/APIError';
-import { useAuthContext } from '../../../contexts/AuthContext/context';
+import { APIError } from '@/api/APIError';
+import { useAuthContext } from '@/contexts/AuthContext/context';
 
-import { Container } from '../../../components/Container/Container';
-import { Label } from '../../../components/Label';
-import { GoogleConsentURLButton } from '../../../components/GoogleConsentURLButton';
-import { Button } from '../../../components/Button';
-import { Form } from '../../../components/Form';
-import { H1 } from '../../../components/Typography';
-import { GithubConsentURLButton } from '../../../components/GithubConsentURLButton';
+import { Container } from '@/components/Container/Container';
+import { H1 } from '@/components/Typography';
+import { Button } from '@/components/Button';
+import { Form } from '@/components/Form';
+import { Label } from '@/components/Label';
+import { GoogleConsentURLButton } from '@/components/GoogleConsentURLButton';
+import { GithubConsentURLButton } from '@/components/GithubConsentURLButton';
 
 type FormData = {
   email: string;

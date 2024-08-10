@@ -1,5 +1,5 @@
 import { cn } from '@/utils';
-import { useConsentURL } from '../hooks/useConsentURL';
+import { useConsentURL } from '@/hooks/useConsentURL';
 import { Button } from './Button';
 
 export type GithubConsentURLButtonProps = {

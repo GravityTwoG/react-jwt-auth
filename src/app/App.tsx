@@ -1,9 +1,9 @@
-import { useAuthContext } from './contexts/AuthContext/context';
-import { AuthStatus } from './types';
+import { useAuthContext } from '../contexts/AuthContext/context';
+import { AuthStatus } from '../types';
 
 import { Link } from 'wouter';
-import { Container } from './components/Container/Container';
-import { ConfigView } from './components/ConfigView';
+import { Container } from '../components/Container/Container';
+import { ConfigView } from '../components/ConfigView';
 import { AppRouter } from './AppRouter';
 
 export function App() {
