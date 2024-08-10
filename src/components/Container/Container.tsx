@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/utils';
 
 import classes from './container.module.css';
 
@@ -11,7 +11,7 @@ export type ContainerProps = {
 export const Container = (props: ContainerProps) => {
   return (
     <div
-      className={clsx(classes.Container, props.className)}
+      className={cn(classes.Container, props.className)}
       style={props.style}
     >
       {props.children}

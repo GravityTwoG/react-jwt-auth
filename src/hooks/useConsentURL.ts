@@ -1,5 +1,5 @@
 import { useAuthContext } from '../contexts/AuthContext/context';
-import { getRedirectURL } from '../getRedirectURL';
+import { getRedirectURL } from '../utils';
 
 export type useConsentURLArgs = {
   redirectPath: string;
@@ -15,6 +15,7 @@ export const useConsentURL = (args: useConsentURLArgs) => {
         args.provider,
         getRedirectURL(args.redirectPath)
       );
+      console.log('redirectURL', redirectURL);
       window.location.href = redirectURL;
     } catch (error) {
       console.error(error);

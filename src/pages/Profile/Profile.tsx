@@ -2,14 +2,16 @@ import { useEffect, useState } from 'react';
 
 import classes from './profile.module.css';
 
-import { useAuthContext } from '../../contexts/AuthContext/context';
-import { Session } from '../../types';
+import { Session, UserAuthProvider } from '@/types';
+import { useAuthContext } from '@/contexts/AuthContext/context';
+import { useAPIContext } from '@/contexts/APIContext/context';
 
-import { Container } from '../../components/Container/Container';
-import { Paper } from '../../components/Paper/Paper';
-import { Button } from '../../components/Button';
-import { H1 } from '../../components/Typography';
-import { useAPIContext } from '../../contexts/APIContext/context';
+import { H1, H2 } from '@/components/Typography';
+import { Button } from '@/components/Button';
+import { Paper } from '@/components/Paper/Paper';
+import { Container } from '@/components/Container/Container';
+import { GithubConsentURLButton } from '@/components/GithubConsentURLButton';
+import { GoogleConsentURLButton } from '@/components/GoogleConsentURLButton';
 
 export const ProfilePage = () => {
   const { user, getActiveSessions, logout, logoutAll, deleteUser } =
@@ -23,13 +25,6 @@ export const ProfilePage = () => {
   const onUpdate = () => {
     getActiveSessions().then(setActiveSessions).catch(console.error);
   };
-
-  const [authProviders, setAuthProviders] = useState<string[]>([]);
-  const { authAPI } = useAPIContext();
-
-  useEffect(() => {
-    authAPI.getAuthProviders().then(setAuthProviders).catch(console.error);
-  }, [authAPI]);
 
   return (
     <Container className={classes.ProfilePage}>
@@ -45,10 +40,13 @@ export const ProfilePage = () => {
       </Paper>
 
       <div className={classes.SessionsHeader}>
-        <h2>Active sessions</h2>
+        <H2>Active sessions</H2>
 
-        <button className="block px-2 py-1 border" onClick={onUpdate}>
-          Update
+        <button
+          className="block px-2 py-1 border rounded-md active:scale-95"
+          onClick={onUpdate}
+        >
+          Refresh
         </button>
       </div>
 
@@ -65,7 +63,10 @@ export const ProfilePage = () => {
 
               <p>
                 <strong>Created </strong>:{' '}
-                {new Date(session.createdAt).toLocaleString()}{' '}
+                {new Date(session.createdAt).toLocaleString()}
+              </p>
+
+              <p>
                 <strong>Updated </strong>:{' '}
                 {new Date(session.updatedAt).toLocaleString()}
               </p>
@@ -74,17 +75,7 @@ export const ProfilePage = () => {
         ))}
       </ul>
 
-      <section className="mt-8">
-        <h2>Auth providers</h2>
-
-        <Paper className="mt-4">
-          <ul>
-            {authProviders.map((provider) => (
-              <li key={provider}>- {provider}</li>
-            ))}
-          </ul>
-        </Paper>
-      </section>
+      <ProvidersList />
 
       <div className="mt-8 mx-auto max-w-80 flex flex-col items-center justify-center gap-4">
         <Button onClick={logoutAll}>Logout all</Button>
@@ -101,4 +92,107 @@ export const ProfilePage = () => {
       </div>
     </Container>
   );
+};
+
+const mapAuthProviders = (providers: string[]) => {
+  const providersMap: { [provider: string]: boolean } = {};
+  for (const provider of providers) {
+    providersMap[provider] = true;
+  }
+
+  return providersMap;
+};
+
+const ProvidersList = () => {
+  const { authAPI } = useAPIContext();
+
+  const [supportedAuthProviders, setSupportedAuthProviders] = useState<{
+    [provider: string]: boolean;
+  }>({});
+
+  const [userAuthProviders, setUserAuthProviders] = useState<{
+    [provider: string]: UserAuthProvider;
+  }>({});
+
+  useEffect(() => {
+    authAPI
+      .getAuthProviders()
+      .then((providers) => {
+        const map: {
+          [provider: string]: UserAuthProvider;
+        } = {};
+
+        for (const provider of providers) {
+          map[provider.name] = provider;
+        }
+
+        setUserAuthProviders(map);
+      })
+      .catch(console.error);
+
+    authAPI
+      .getSupportedAuthProviders()
+      .then((providers) => {
+        setSupportedAuthProviders(mapAuthProviders(['local', ...providers]));
+      })
+      .catch(console.error);
+  }, [authAPI]);
+
+  return (
+    <section className="mt-8">
+      <H2>Auth providers</H2>
+
+      <Paper className="mt-4">
+        <ul className="flex flex-col gap-4">
+          {Object.keys(supportedAuthProviders).map((provider) => (
+            <li key={provider} className="flex items-center gap-2">
+              <p>
+                <strong>{provider}</strong>
+              </p>
+
+              <p>-</p>
+
+              {userAuthProviders[provider] ? (
+                <p>{userAuthProviders[provider].email}</p>
+              ) : (
+                <ConsentURLButton
+                  provider={provider}
+                  className="max-w-[120px] py-1 px-2"
+                />
+              )}
+            </li>
+          ))}
+        </ul>
+      </Paper>
+    </section>
+  );
+};
+
+type ConsentURLButtonProps = {
+  provider: string;
+  className?: string;
+};
+
+const ConsentURLButton = ({ provider, className }: ConsentURLButtonProps) => {
+  if (provider === 'google') {
+    return (
+      <GoogleConsentURLButton
+        redirectPath={`/oauth/${provider}/connect`}
+        className={className}
+      >
+        Connect
+      </GoogleConsentURLButton>
+    );
+  }
+
+  if (provider === 'github') {
+    return (
+      <GithubConsentURLButton
+        redirectPath={`/oauth/${provider}/connect`}
+        className={className}
+      >
+        Connect
+      </GithubConsentURLButton>
+    );
+  }
 };

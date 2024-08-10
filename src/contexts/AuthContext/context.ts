@@ -23,6 +23,11 @@ interface IAuthContext {
     code: string,
     redirectURL: string
   ) => Promise<void>;
+  connectOAuth: (
+    provider: string,
+    code: string,
+    redirectURL: string
+  ) => Promise<void>;
 
   logout: () => Promise<void>;
   logoutAll: () => Promise<void>;
@@ -44,6 +49,7 @@ export const AuthContext = createContext<IAuthContext>({
 
   requestConsentURL: async () => '',
   loginWithOAuth: async () => {},
+  connectOAuth: async () => {},
 
   logout: async () => {},
   logoutAll: async () => {},

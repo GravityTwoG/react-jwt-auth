@@ -111,6 +111,7 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
 
         requestConsentURL: requestConsentURL,
         loginWithOAuth: loginWithOAuth,
+        connectOAuth: authAPI.connectOAuth,
 
         logout,
         logoutAll,

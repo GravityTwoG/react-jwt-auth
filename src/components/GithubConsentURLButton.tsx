@@ -1,10 +1,12 @@
+import { cn } from '@/utils';
 import { useConsentURL } from '../hooks/useConsentURL';
 import { Button } from './Button';
 
 export type GithubConsentURLButtonProps = {
-  disabled: boolean;
+  disabled?: boolean;
   redirectPath: string;
   children?: React.ReactNode;
+  className?: string;
 };
 
 export const GithubConsentURLButton = (props: GithubConsentURLButtonProps) => {
@@ -18,7 +20,7 @@ export const GithubConsentURLButton = (props: GithubConsentURLButtonProps) => {
       type="button"
       onClick={onClick}
       disabled={props.disabled}
-      className="bg-white hover:bg-gray-100 font-bold !text-gray-800 hover:text-gray-900"
+      className={cn("bg-white hover:bg-gray-100 font-bold !text-gray-800 hover:text-gray-900", props.className)}
     >
       {props.children}
     </Button>

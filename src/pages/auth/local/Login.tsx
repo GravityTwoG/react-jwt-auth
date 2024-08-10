@@ -82,12 +82,12 @@ export const LoginPage = () => {
 
         <GoogleConsentURLButton
           disabled={isSubmitting}
-          redirectPath="/login/google"
+          redirectPath="/oauth/google/login"
           children="Login with Google"
         />
         <GithubConsentURLButton
           disabled={isSubmitting}
-          redirectPath="/register/github/login"
+          redirectPath="/oauth/github/login"
           children="Login with Github"
         />
 

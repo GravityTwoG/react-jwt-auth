@@ -1,14 +1,15 @@
-import { useParams } from 'wouter';
+import { useLocation, useParams } from 'wouter';
 
 import classes from '../auth.module.css';
 
-import { getRedirectURL } from '../../../getRedirectURL';
+import { getRedirectURL } from '@/utils';
+import { useRegisterWithOAuth } from '@/hooks/useRegisterWithOAuth';
 
-import { Container } from '../../../components/Container/Container';
-import { useRegisterWithOAuth } from '../../../hooks/useRegisterWithOAuth';
-import { H1 } from '../../../components/Typography';
+import { H1 } from '@/components/Typography';
+import { Container } from '@/components/Container/Container';
 
 export const RegisterWithOAuthPage = () => {
+  const [location] = useLocation();
   const provider = useParams<{ provider: string }>().provider;
 
   const code = new URLSearchParams(window.location.search).get('code') || '';
@@ -16,7 +17,7 @@ export const RegisterWithOAuthPage = () => {
   const [isLoading, error] = useRegisterWithOAuth({
     provider,
     code,
-    redirectPath: getRedirectURL(`/register/${provider}`),
+    redirectPath: getRedirectURL(location),
   });
 
   return (

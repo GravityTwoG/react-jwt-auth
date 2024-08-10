@@ -10,7 +10,7 @@ import { RegisterWithOAuthPage } from './pages/auth/oauth/RegisterWithOAuth';
 import { LoginWithOAuthPage } from './pages/auth/oauth/LoginWithOAuth';
 
 import { ProfilePage } from './pages/Profile/Profile';
-import { LoginWithGithubPage } from './pages/auth/oauth/LoginWithGithub';
+import { ConnectOAuthPage } from './pages/auth/oauth/ConnectOAuth';
 
 const profilePage = privatePage(ProfilePage);
 
@@ -19,7 +19,8 @@ const loginPage = anonymousPage(LoginPage);
 
 const registerWithOAuthPage = anonymousPage(RegisterWithOAuthPage);
 const loginWithOAuthPage = anonymousPage(LoginWithOAuthPage);
-const loginWithGithubPage = anonymousPage(LoginWithGithubPage);
+// only authenticated users can connect other OAuth providers
+const connectOAuthPage = privatePage(ConnectOAuthPage);
 
 export const AppRouter = () => {
   return (
@@ -29,13 +30,12 @@ export const AppRouter = () => {
         <Route path={'/register'} component={registerPage} />
         <Route path={'/login'} component={loginPage} />
 
-        <Route path={'/register/:provider'} component={registerWithOAuthPage} />
-        <Route path={'/login/:provider'} component={loginWithOAuthPage} />
-        {/* Github doesn't support multiple redirect URLs, so we use sub path of register/github */}
         <Route
-          path={'/register/github/login'}
-          component={loginWithGithubPage}
+          path={'/oauth/:provider/register'}
+          component={registerWithOAuthPage}
         />
+        <Route path={'/oauth/:provider/login'} component={loginWithOAuthPage} />
+        <Route path={'/oauth/:provider/connect'} component={connectOAuthPage} />
 
         <Route>
           <h1>Page not found</h1>

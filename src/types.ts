@@ -15,3 +15,9 @@ export type Session = {
   createdAt: string;
   updatedAt: string;
 };
+
+
+export type UserAuthProvider = {
+  name: string;
+  email: string;
+};

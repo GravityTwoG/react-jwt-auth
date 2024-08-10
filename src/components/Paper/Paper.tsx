@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { cn } from '@/utils';
 
 import classes from './paper.module.css';
 
@@ -9,6 +9,6 @@ export type PaperProps = {
 
 export const Paper = (props: PaperProps) => {
   return (
-    <div className={clsx(classes.Paper, props.className)}>{props.children}</div>
+    <div className={cn(classes.Paper, props.className)}>{props.children}</div>
   );
 };

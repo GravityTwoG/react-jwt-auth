@@ -1,7 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { getFingerprint } from '@thumbmarkjs/thumbmarkjs';
 
-import { Session, User } from '../types';
+import { Session, User, UserAuthProvider } from '@/types';
 import { AccessTokenService } from './AccessTokenService';
 
 type AuthenticateResponseDTO = {
@@ -143,6 +143,21 @@ export class AuthAPI {
     return response.data.user;
   };
 
+  connectOAuth = async (
+    provider: string,
+    code: string,
+    redirectURL: string
+  ) => {
+    await this.axios.post<{ message: string }>(
+      `/auth/${provider}/connect-callback`,
+      {
+        code,
+        fingerPrint: await getFingerPrint(),
+        redirectURL,
+      }
+    );
+  };
+
   refreshTokens = async () => {
     try {
       if (!this.refreshPromise) {
@@ -206,7 +221,7 @@ export class AuthAPI {
   };
 
   getAuthProviders = async () => {
-    const response = await this.axios.get<string[]>('/auth/me/auth-providers');
+    const response = await this.axios.get<UserAuthProvider[]>('/auth/me/auth-providers');
     return response.data;
   };
 
@@ -215,6 +230,13 @@ export class AuthAPI {
       accessTokenTTLsec: number;
       refreshTokenTTLsec: number;
     }>('/auth/config');
+    return response.data;
+  };
+
+  getSupportedAuthProviders = async () => {
+    const response = await this.axios.get<string[]>(
+      '/auth/oauth-providers'
+    );
     return response.data;
   };
 }
