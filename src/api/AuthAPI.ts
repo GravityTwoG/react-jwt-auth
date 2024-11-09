@@ -99,19 +99,24 @@ export class AuthAPI {
   getConsentURL = async (provider: string, redirectURL: string) => {
     const response = await this.axios.get<{
       redirectURL: string;
+      codeVerifier: string;
     }>(`/auth/${provider}/consent?redirectURL=${redirectURL}`);
-    return response.data.redirectURL;
+    return response.data;
   };
 
   registerWithOAuth = async (
     provider: string,
     code: string,
+    codeVerifier: string,
+    deviceId: string,
     redirectURL: string
   ) => {
     const response = await this.axios.post<AuthenticateResponseDTO>(
       `/auth/${provider}/register-callback`,
       {
         code,
+        codeVerifier,
+        deviceId,
         fingerPrint: await getFingerPrint(),
         redirectURL,
       }
@@ -126,12 +131,16 @@ export class AuthAPI {
   loginWithOAuth = async (
     provider: string,
     code: string,
+    codeVerifier: string,
+    deviceId: string,
     redirectURL: string
   ) => {
     const response = await this.axios.post<AuthenticateResponseDTO>(
       `/auth/${provider}/login-callback`,
       {
         code,
+        codeVerifier,
+        deviceId,
         fingerPrint: await getFingerPrint(),
         redirectURL,
       }

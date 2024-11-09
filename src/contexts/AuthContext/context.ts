@@ -16,11 +16,13 @@ interface IAuthContext {
   registerWithOAuth: (
     provider: string,
     code: string,
+    deviceId: string,
     redirectURL: string
   ) => Promise<void>;
   loginWithOAuth: (
     provider: string,
     code: string,
+    deviceId: string,
     redirectURL: string
   ) => Promise<void>;
   connectOAuth: (

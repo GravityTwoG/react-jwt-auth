@@ -15,7 +15,6 @@ export const useConsentURL = (args: useConsentURLArgs) => {
         args.provider,
         getRedirectURL(args.redirectPath)
       );
-      console.log('redirectURL', redirectURL);
       window.location.href = redirectURL;
     } catch (error) {
       console.error(error);

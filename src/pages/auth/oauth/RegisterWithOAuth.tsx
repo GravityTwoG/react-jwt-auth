@@ -12,11 +12,14 @@ export const RegisterWithOAuthPage = () => {
   const [location] = useLocation();
   const provider = useParams<{ provider: string }>().provider;
 
-  const code = new URLSearchParams(window.location.search).get('code') || '';
+  const searchParams = new URLSearchParams(window.location.search);
+  const code = searchParams.get('code') || '';
+  const deviceId = searchParams.get('deviceId') || '';
 
   const [isLoading, error] = useRegisterWithOAuth({
     provider,
     code,
+    deviceId,
     redirectPath: getRedirectURL(location),
   });
 

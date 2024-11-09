@@ -4,6 +4,7 @@ import { useAuthContext } from '@/contexts/AuthContext/context';
 export type useRegisterWithOAuthArgs = {
   provider: string;
   code: string;
+  deviceId: string;
   redirectPath: string;
 };
 
@@ -24,7 +25,12 @@ export const useRegisterWithOAuth = (args: useRegisterWithOAuthArgs) => {
       try {
         setError('');
         setIsLoading(true);
-        await registerWithOAuth(args.provider, args.code, args.redirectPath);
+        await registerWithOAuth(
+          args.provider,
+          args.code,
+          args.deviceId,
+          args.redirectPath
+        );
       } catch (error) {
         console.error(error);
         setError(

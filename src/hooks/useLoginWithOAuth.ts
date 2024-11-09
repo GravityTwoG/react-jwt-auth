@@ -4,6 +4,7 @@ import { useAuthContext } from '@/contexts/AuthContext/context';
 export type useLoginWithOAuthArgs = {
   provider: string;
   code: string;
+  deviceId: string;
   redirectPath: string;
 };
 
@@ -24,7 +25,12 @@ export const useLoginWithOAuth = (args: useLoginWithOAuthArgs) => {
       try {
         setError('');
         setIsLoading(true);
-        await loginWithOAuth(args.provider, args.code, args.redirectPath);
+        await loginWithOAuth(
+          args.provider,
+          args.code,
+          args.deviceId,
+          args.redirectPath
+        );
       } catch (error) {
         console.error(error);
         setError(

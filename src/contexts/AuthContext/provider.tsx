@@ -45,30 +45,55 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
     [authAPI]
   );
 
+  const requestConsentURL = useCallback(
+    async (provider: string, redirectURL: string) => {
+      const { redirectURL: oauthRedirectURL, codeVerifier } =
+        await authAPI.getConsentURL(provider, redirectURL);
+
+      localStorage.setItem('codeVerifier', codeVerifier);
+
+      return oauthRedirectURL;
+    },
+    [authAPI]
+  );
+
   const registerWithOAuth = useCallback(
-    async (provider: string, code: string, redirectURL: string) => {
-      const user = await authAPI.registerWithOAuth(provider, code, redirectURL);
+    async (provider: string, code: string, deviceId: string, redirectURL: string) => {
+      const codeVerifier = localStorage.getItem('codeVerifier');
+      if (!codeVerifier) {
+        throw new Error('Code verifier not found');
+      }
+      const user = await authAPI.registerWithOAuth(
+        provider,
+        code,
+        codeVerifier,
+        deviceId,
+        redirectURL
+      );
       setUser(user);
       setAuthStatus(AuthStatus.AUTHENTICATED);
     },
     [authAPI]
   );
 
-  const requestConsentURL = useCallback(
-    async (provider: string, redirectURL: string) => {
-      const googleRedirectURL = await authAPI.getConsentURL(
+  const loginWithOAuth = useCallback(
+    async (
+      provider: string,
+      code: string,
+      deviceId: string,
+      redirectURL: string
+    ) => {
+      const codeVerifier = localStorage.getItem('codeVerifier');
+      if (!codeVerifier) {
+        throw new Error('Code verifier not found');
+      }
+      const user = await authAPI.loginWithOAuth(
         provider,
+        code,
+        codeVerifier,
+        deviceId,
         redirectURL
       );
-
-      return googleRedirectURL;
-    },
-    [authAPI]
-  );
-
-  const loginWithOAuth = useCallback(
-    async (provider: string, code: string, redirectURL: string) => {
-      const user = await authAPI.loginWithOAuth(provider, code, redirectURL);
       setUser(user);
       setAuthStatus(AuthStatus.AUTHENTICATED);
     },
@@ -107,9 +132,8 @@ export const AuthContextProvider = (props: { children: React.ReactNode }) => {
         register,
         login,
 
-        registerWithOAuth: registerWithOAuth,
-
         requestConsentURL: requestConsentURL,
+        registerWithOAuth: registerWithOAuth,
         loginWithOAuth: loginWithOAuth,
         connectOAuth: authAPI.connectOAuth,
 
