@@ -1,26 +1,17 @@
-import { useLocation, useParams } from 'wouter';
+import { useParams } from 'wouter';
 
 import classes from '../auth.module.css';
 
-import { getRedirectURL } from '@/utils';
-import { useRegisterWithOAuth } from '@/hooks/useRegisterWithOAuth';
+import { useRegisterWithOAuth } from '@/contexts/AuthContext/hooks/useRegisterWithOAuth';
 
 import { H1 } from '@/components/Typography';
 import { Container } from '@/components/Container/Container';
 
 export const RegisterWithOAuthPage = () => {
-  const [location] = useLocation();
   const provider = useParams<{ provider: string }>().provider;
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const code = searchParams.get('code') || '';
-  const deviceId = searchParams.get('deviceId') || '';
 
   const [isLoading, error] = useRegisterWithOAuth({
     provider,
-    code,
-    deviceId,
-    redirectPath: getRedirectURL(location),
   });
 
   return (
@@ -32,7 +23,7 @@ export const RegisterWithOAuthPage = () => {
       {error && <p className="text-red-500">{error}</p>}
 
       {!isLoading && !error && (
-        <p className="text-green-500">Registration successful.</p>
+        <p className="text-green-500">You are successfully registered.</p>
       )}
     </Container>
   );

@@ -7,7 +7,7 @@ import { RegisterPage } from '../pages/auth/local/Register';
 import { LoginPage } from '../pages/auth/local/Login';
 
 import { RegisterWithOAuthPage } from '../pages/auth/oauth/RegisterWithOAuth';
-import { LoginWithOAuthPage } from '../pages/auth/oauth/LoginWithOAuth';
+import { OAuthLoginCallbackPage } from '../pages/auth/oauth/LoginWithOAuth';
 
 import { ProfilePage } from '../pages/Profile/Profile';
 import { ConnectOAuthPage } from '../pages/auth/oauth/ConnectOAuth';
@@ -18,7 +18,7 @@ const registerPage = anonymousPage(RegisterPage);
 const loginPage = anonymousPage(LoginPage);
 
 const registerWithOAuthPage = anonymousPage(RegisterWithOAuthPage);
-const loginWithOAuthPage = anonymousPage(LoginWithOAuthPage);
+const loginWithOAuthPage = anonymousPage(OAuthLoginCallbackPage);
 // only authenticated users can connect other OAuth providers
 const connectOAuthPage = privatePage(ConnectOAuthPage);
 

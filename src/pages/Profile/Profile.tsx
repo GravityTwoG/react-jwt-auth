@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import classes from './profile.module.css';
 
@@ -10,8 +10,11 @@ import { H1, H2 } from '@/components/Typography';
 import { Button } from '@/components/Button';
 import { Paper } from '@/components/Paper/Paper';
 import { Container } from '@/components/Container/Container';
-import { GithubConsentURLButton } from '@/components/GithubConsentURLButton';
-import { GoogleConsentURLButton } from '@/components/GoogleConsentURLButton';
+import {
+  GoogleOAuthButton,
+  GithubOAuthButton,
+  OAuthButtonProps,
+} from '@/components/oauth';
 
 export const ProfilePage = () => {
   const { user, getActiveSessions, logout, logoutAll, deleteUser } =
@@ -103,8 +106,14 @@ const mapAuthProviders = (providers: string[]) => {
   return providersMap;
 };
 
+const connectOAuthButtons: Record<string, React.FC<OAuthButtonProps>> = {
+  google: GoogleOAuthButton,
+  github: GithubOAuthButton,
+};
+
 const ProvidersList = () => {
   const { authAPI } = useAPIContext();
+  const { connectOAuth } = useAuthContext();
 
   const [supportedAuthProviders, setSupportedAuthProviders] = useState<{
     [provider: string]: boolean;
@@ -114,21 +123,26 @@ const ProvidersList = () => {
     [provider: string]: UserAuthProvider;
   }>({});
 
+  const getUserAuthProviders = useCallback(async () => {
+    try {
+      const providers = await authAPI.getAuthProviders();
+
+      const map: {
+        [provider: string]: UserAuthProvider;
+      } = {};
+
+      for (const provider of providers) {
+        map[provider.name] = provider;
+      }
+
+      setUserAuthProviders(map);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [authAPI]);
+
   useEffect(() => {
-    authAPI
-      .getAuthProviders()
-      .then((providers) => {
-        const map: {
-          [provider: string]: UserAuthProvider;
-        } = {};
-
-        for (const provider of providers) {
-          map[provider.name] = provider;
-        }
-
-        setUserAuthProviders(map);
-      })
-      .catch(console.error);
+    getUserAuthProviders();
 
     authAPI
       .getSupportedAuthProviders()
@@ -136,7 +150,20 @@ const ProvidersList = () => {
         setSupportedAuthProviders(mapAuthProviders(['local', ...providers]));
       })
       .catch(console.error);
-  }, [authAPI]);
+  }, [authAPI, getUserAuthProviders]);
+
+  const connect = useCallback(
+    async (provider: string) => {
+      try {
+        await connectOAuth(provider);
+        getUserAuthProviders();
+      } catch (error) {
+        console.error(error);
+        alert(`Failed to connect to ${provider}: ${error}`);
+      }
+    },
+    [connectOAuth, getUserAuthProviders]
+  );
 
   return (
     <section className="mt-8">
@@ -144,55 +171,32 @@ const ProvidersList = () => {
 
       <Paper className="mt-4">
         <ul className="flex flex-col gap-4">
-          {Object.keys(supportedAuthProviders).map((provider) => (
-            <li key={provider} className="flex items-center gap-2">
-              <p>
-                <strong>{provider}</strong>
-              </p>
+          {Object.keys(supportedAuthProviders).map((provider) => {
+            const ConnectOAuthButton = connectOAuthButtons[provider];
 
-              <p>-</p>
+            return (
+              <li key={provider} className="flex items-center gap-2">
+                <p>
+                  <strong>{provider}</strong>
+                </p>
 
-              {userAuthProviders[provider] ? (
-                <p>{userAuthProviders[provider].email}</p>
-              ) : (
-                <ConsentURLButton
-                  provider={provider}
-                  className="max-w-[120px] py-1 px-2"
-                />
-              )}
-            </li>
-          ))}
+                <p>-</p>
+
+                {userAuthProviders[provider] ? (
+                  <p>{userAuthProviders[provider].email}</p>
+                ) : ConnectOAuthButton ? (
+                  <ConnectOAuthButton
+                    provider={provider}
+                    className="max-w-[120px] py-1 px-2"
+                    onClick={connect}
+                    children="Connect"
+                  />
+                ) : null}
+              </li>
+            );
+          })}
         </ul>
       </Paper>
     </section>
   );
-};
-
-type ConsentURLButtonProps = {
-  provider: string;
-  className?: string;
-};
-
-const ConsentURLButton = ({ provider, className }: ConsentURLButtonProps) => {
-  if (provider === 'google') {
-    return (
-      <GoogleConsentURLButton
-        redirectPath={`/oauth/${provider}/connect`}
-        className={className}
-      >
-        Connect
-      </GoogleConsentURLButton>
-    );
-  }
-
-  if (provider === 'github') {
-    return (
-      <GithubConsentURLButton
-        redirectPath={`/oauth/${provider}/connect`}
-        className={className}
-      >
-        Connect
-      </GithubConsentURLButton>
-    );
-  }
 };

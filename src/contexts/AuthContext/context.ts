@@ -5,6 +5,12 @@ interface IAuthContext {
   user: User;
   authStatus: AuthStatus;
 
+  oauthError: string;
+  isOAuthPending: boolean;
+
+  setOAuthError: (error: string) => void;
+  setOAuthIsPending: (isPending: boolean) => void;
+
   register: (
     email: string,
     password: string,
@@ -12,20 +18,21 @@ interface IAuthContext {
   ) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
 
-  requestConsentURL: (provider: string, redirectURL: string) => Promise<string>;
-  registerWithOAuth: (
+  registerWithOAuth: (provider: string) => Promise<void>;
+  loginWithOAuth: (provider: string) => Promise<void>;
+  connectOAuth: (provider: string) => Promise<void>;
+
+  registerWithOAuthFallback: (
     provider: string,
     code: string,
-    deviceId: string,
-    redirectURL: string
+    deviceId: string
   ) => Promise<void>;
-  loginWithOAuth: (
+  loginWithOAuthFallback: (
     provider: string,
     code: string,
-    deviceId: string,
-    redirectURL: string
+    deviceId: string
   ) => Promise<void>;
-  connectOAuth: (
+  connectOAuthFallback: (
     provider: string,
     code: string,
     redirectURL: string
@@ -44,14 +51,23 @@ export const AuthContext = createContext<IAuthContext>({
     email: '',
   },
   authStatus: AuthStatus.LOADING,
+
+  oauthError: '',
+  isOAuthPending: false,
+
+  setOAuthError: () => {},
+  setOAuthIsPending: () => {},
+
   register: async () => {},
   login: async () => {},
 
   registerWithOAuth: async () => {},
-
-  requestConsentURL: async () => '',
   loginWithOAuth: async () => {},
   connectOAuth: async () => {},
+
+  loginWithOAuthFallback: async () => {},
+  registerWithOAuthFallback: async () => {},
+  connectOAuthFallback: async () => {},
 
   logout: async () => {},
   logoutAll: async () => {},

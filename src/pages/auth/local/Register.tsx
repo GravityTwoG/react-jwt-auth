@@ -10,8 +10,7 @@ import { Button } from '@/components/Button';
 import { Container } from '@/components/Container/Container';
 import { Label } from '@/components/Label';
 import { Form } from '@/components/Form';
-import { GoogleConsentURLButton } from '@/components/GoogleConsentURLButton';
-import { GithubConsentURLButton } from '@/components/GithubConsentURLButton';
+import { GoogleOAuthButton, GithubOAuthButton } from '@/components/oauth';
 
 type FormData = {
   email: string;
@@ -20,7 +19,8 @@ type FormData = {
 };
 
 export const RegisterPage = () => {
-  const { register: authRegister } = useAuthContext();
+  const { register: authRegister, registerWithOAuth: oauthRegister } =
+    useAuthContext();
 
   const {
     register,
@@ -50,6 +50,26 @@ export const RegisterPage = () => {
       }
     }
   });
+
+  const registerWithOAuth = async (provider: string) => {
+    try {
+      await oauthRegister(provider);
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof APIError) {
+        setError('root', {
+          type: 'custom',
+          message: mapError(error),
+        });
+      } else {
+        setError('root', {
+          type: 'custom',
+          message: 'Something went wrong. Please try again later.',
+        });
+      }
+    }
+  };
 
   return (
     <Container className={classes.AuthPage}>
@@ -91,15 +111,17 @@ export const RegisterPage = () => {
           Register
         </Button>
 
-        <GoogleConsentURLButton
+        <GoogleOAuthButton
           disabled={isSubmitting}
-          redirectPath="/oauth/google/register"
           children="Register with Google"
+          provider="google"
+          onClick={registerWithOAuth}
         />
-        <GithubConsentURLButton
+        <GithubOAuthButton
           disabled={isSubmitting}
-          redirectPath="/oauth/github/register"
           children="Register with Github"
+          provider="github"
+          onClick={registerWithOAuth}
         />
 
         <p>

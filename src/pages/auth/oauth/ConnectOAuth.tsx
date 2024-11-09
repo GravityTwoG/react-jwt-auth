@@ -1,23 +1,17 @@
-import { useLocation, useParams } from 'wouter';
+import { useParams } from 'wouter';
 
 import classes from '../auth.module.css';
 
-import { getRedirectURL } from '@/utils';
-import { useConnectOAuth } from '@/hooks/useConnectOAuth';
+import { useConnectOAuth } from '@/contexts/AuthContext/hooks/useConnectOAuth';
 
 import { Container } from '@/components/Container/Container';
 import { H1 } from '@/components/Typography';
 
 export const ConnectOAuthPage = () => {
-  const [location] = useLocation();
   const provider = useParams<{ provider: string }>().provider;
-
-  const code = new URLSearchParams(window.location.search).get('code') || '';
 
   const [isLoading, error] = useConnectOAuth({
     provider,
-    code,
-    redirectPath: getRedirectURL(location),
   });
 
   return (

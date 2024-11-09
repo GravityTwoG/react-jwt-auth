@@ -1,26 +1,17 @@
-import { useLocation, useParams } from 'wouter';
+import { useParams } from 'wouter';
 
 import classes from '../auth.module.css';
 
-import { getRedirectURL } from '@/utils';
-import { useLoginWithOAuth } from '@/hooks/useLoginWithOAuth';
+import { useLoginWithOAuth } from '@/contexts/AuthContext/hooks/useLoginWithOAuth';
 
 import { Container } from '@/components/Container/Container';
 import { H1 } from '@/components/Typography';
 
-export const LoginWithOAuthPage = () => {
-  const [location] = useLocation();
+export const OAuthLoginCallbackPage = () => {
   const provider = useParams<{ provider: string }>().provider;
-
-  const searchParams = new URLSearchParams(window.location.search);
-  const code = searchParams.get('code') || '';
-  const deviceId = searchParams.get('deviceId') || '';
 
   const [isLoading, error] = useLoginWithOAuth({
     provider,
-    code,
-    deviceId,
-    redirectPath: getRedirectURL(location),
   });
 
   return (

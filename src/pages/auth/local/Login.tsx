@@ -10,8 +10,7 @@ import { H1 } from '@/components/Typography';
 import { Button } from '@/components/Button';
 import { Form } from '@/components/Form';
 import { Label } from '@/components/Label';
-import { GoogleConsentURLButton } from '@/components/GoogleConsentURLButton';
-import { GithubConsentURLButton } from '@/components/GithubConsentURLButton';
+import { GoogleOAuthButton, GithubOAuthButton } from '@/components/oauth';
 
 type FormData = {
   email: string;
@@ -19,7 +18,7 @@ type FormData = {
 };
 
 export const LoginPage = () => {
-  const { login } = useAuthContext();
+  const { login, loginWithOAuth: oauthLogin } = useAuthContext();
 
   const {
     register,
@@ -49,6 +48,26 @@ export const LoginPage = () => {
       }
     }
   });
+
+  const loginWithOAuth = async (provider: string) => {
+    try {
+      await oauthLogin(provider);
+    } catch (error) {
+      console.error(error);
+
+      if (error instanceof APIError) {
+        setError('root', {
+          type: 'custom',
+          message: mapError(error),
+        });
+      } else {
+        setError('root', {
+          type: 'custom',
+          message: 'Something went wrong. Please try again later.',
+        });
+      }
+    }
+  }
 
   return (
     <Container className={classes.AuthPage}>
@@ -80,15 +99,17 @@ export const LoginPage = () => {
           Login
         </Button>
 
-        <GoogleConsentURLButton
+        <GoogleOAuthButton
           disabled={isSubmitting}
-          redirectPath="/oauth/google/login"
           children="Login with Google"
+          provider="google"
+          onClick={loginWithOAuth}
         />
-        <GithubConsentURLButton
+        <GithubOAuthButton
           disabled={isSubmitting}
-          redirectPath="/oauth/github/login"
           children="Login with Github"
+          provider="github"
+          onClick={loginWithOAuth}
         />
 
         <p>

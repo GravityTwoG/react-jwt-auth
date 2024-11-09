@@ -155,12 +155,16 @@ export class AuthAPI {
   connectOAuth = async (
     provider: string,
     code: string,
+    codeVerifier: string,
+    deviceId: string,
     redirectURL: string
   ) => {
     await this.axios.post<{ message: string }>(
       `/auth/${provider}/connect-callback`,
       {
         code,
+        codeVerifier,
+        deviceId,
         fingerPrint: await getFingerPrint(),
         redirectURL,
       }
